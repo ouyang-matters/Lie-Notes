@@ -296,12 +296,22 @@
   % --- Background geometry (TikZ overlay, behind everything) ---
   \begin{tikzpicture}[remember picture, overlay]
     %
-    % Large tinted diamond (rotated square): top-right, partially clipped.
-    \fill[\SeriesTint, opacity=0.9]
-      ([xshift=-1.5in, yshift=1.5in] current page.north east) --
-      ([xshift=1.5in, yshift=-1.5in] current page.north east) --
-      ([xshift=-1.5in, yshift=-4.5in] current page.north east) --
-      ([xshift=-4.5in, yshift=-1.5in] current page.north east) -- cycle;
+    % Diamond lattice pattern: top-right corner
+    \coordinate (anchor) at ([xshift=-1.2in, yshift=-1.2in] current page.north east);
+    \foreach \dx/\dy/\s/\o in {
+      0/0/1.8/0.35,
+      1.6/-0.3/1.4/0.25,
+      -0.3/-1.6/1.4/0.25,
+      1.3/-1.9/1.1/0.18,
+      -1.5/0.2/1.1/0.18,
+      0.1/1.7/1.2/0.20,
+      2.8/-1.2/0.9/0.15,
+      -1.0/-2.8/0.9/0.15
+    } {
+      \fill[\SeriesTint, opacity=\o]
+        ([shift={(\dx in, \dy in)}] anchor)
+        ++(0,\s in) -- ++(\s in, -\s in) -- ++(0,-\s in) -- ++(-\s in, \s in) -- cycle;
+    }
     %
   \end{tikzpicture}%
   %
