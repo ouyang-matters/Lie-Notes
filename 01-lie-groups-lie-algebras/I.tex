@@ -1,0 +1,1296 @@
+\documentclass{article}
+
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{math_blog}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+\title{李群与李代数 I}
+\author{Anqiao Ouyang}
+\date{}
+
+\maketitle
+
+\section*{引言}
+
+李群与李代数的核心问题，可以用一个非常简洁的词来概括：\textbf{连续对称性}。
+
+有限群能够描述离散的对称。例如，一个固定立方体所有保持其形状不变的空间旋转只有有限多个，它们组成一个有限群。另一方面，如果我们不要求旋转之后立方体恰好回到原来的位置，而是研究三维空间中所有可能的旋转，那么旋转角度可以连续变化，这些旋转便组成李群
+\[
+\mathrm{SO}(3).
+\]
+
+从这个角度看，李群同时拥有两种结构。一方面，它是一个群，因此可以描述对称变换的复合与逆；另一方面，它又是一个光滑流形，因此可以使用微积分研究这些变换如何连续变化。
+
+李代数则是这种连续对称性的\textbf{无穷小版本}。如果一个李群描述所有有限大小的连续变换，那么它在单位元附近的切空间便描述这些变换在无穷小尺度下的行为。这个切空间连同一个自然出现的括号运算，构成李群对应的李代数。
+
+因此，李理论中存在一条非常重要的思想链：
+\[
+\text{Lie group}
+\longrightarrow
+T_eG
+\longrightarrow
+\text{Lie algebra}
+\longrightarrow
+\text{local structure of }G.
+\]
+
+本篇将沿着这条路线展开。我们首先介绍李群与群作用，然后讨论轨道、稳定子群与齐性空间，最后从切空间和向量场出发构造李代数，并介绍连接李代数与李群的指数映射。
+
+阅读本文只需要熟悉基础线性代数、群论以及多元微积分中的基本概念。对于光滑流形尚不熟悉的读者，也可以先将其理解为局部看起来像欧几里得空间、并且允许进行微分运算的空间。
+
+
+\section{连续对称性与李群}
+
+\subsection{从旋转群开始}
+
+考虑三维欧几里得空间 $\mathbb{R}^3$。
+
+所有保持欧几里得长度并保持空间定向的线性变换可以写成
+\[
+\mathrm{SO}(3)
+=
+\left\{
+R\in M_3(\mathbb{R})
+:
+R^{\mathsf T}R=I,\;
+\det R=1
+\right\}.
+\]
+
+其中 $M_3(\mathbb{R})$ 表示所有 $3\times 3$ 实矩阵组成的空间。
+
+如果 $R_1,R_2\in\mathrm{SO}(3)$，那么
+\[
+R_1R_2\in\mathrm{SO}(3),
+\]
+并且
+\[
+R^{-1}=R^{\mathsf T}\in\mathrm{SO}(3).
+\]
+
+因此 $\mathrm{SO}(3)$ 是一个群。
+
+但它不仅仅是一个群。矩阵中的元素可以连续变化，而 $\mathrm{SO}(3)$ 本身可以被赋予一个三维光滑流形结构。于是我们不仅可以讨论两个旋转如何相乘，也可以讨论旋转随时间如何变化、旋转群上的切向量以及旋转群附近的局部几何。
+
+这种同时具有群结构与光滑结构的对象，就是李群。
+
+需要特别区分两个容易混淆的概念。$\mathrm{SO}(3)$ 描述的是三维空间中\textbf{所有}保持定向的旋转，而一个固定立方体自身的旋转对称只有有限多个。这些旋转构成 $\mathrm{SO}(3)$ 的一个有限子群，而不是整个 $\mathrm{SO}(3)$。
+
+
+\subsection{李群的定义}
+
+\textbf{定义 1.}
+一个\textbf{李群}（Lie group）是一个光滑流形 $G$，同时具有群结构，并且群运算
+\[
+m:G\times G\to G,
+\qquad
+m(g,h)=gh
+\]
+以及取逆映射
+\[
+\iota:G\to G,
+\qquad
+\iota(g)=g^{-1}
+\]
+都是光滑映射。
+
+换句话说，李群要求代数结构和微分结构彼此兼容。
+
+这里的“光滑流形”通常默认是有限维、Hausdorff 且满足第二可数性的实光滑流形。无限维李群也确实存在，但其分析理论会复杂很多，本文只讨论有限维实李群。
+
+
+\subsection{几个基本例子}
+
+最简单的李群之一是加法群
+\[
+(\mathbb{R}^n,+).
+\]
+
+它的群运算就是向量加法，并且底层空间本身就是光滑流形 $\mathbb{R}^n$。
+
+另一个重要例子是一般线性群
+\[
+\mathrm{GL}(n,\mathbb{R})
+=
+\{A\in M_n(\mathbb{R}):\det A\neq 0\}.
+\]
+
+由于行列式是连续函数，
+\[
+\mathrm{GL}(n,\mathbb{R})
+=
+\det^{-1}(\mathbb{R}\setminus\{0\})
+\]
+是 $M_n(\mathbb{R})\cong\mathbb{R}^{n^2}$ 中的开集，因此自然是一个 $n^2$ 维光滑流形。
+
+矩阵乘法和矩阵求逆在 $\mathrm{GL}(n,\mathbb{R})$ 上都是光滑的，因此 $\mathrm{GL}(n,\mathbb{R})$ 是李群。
+
+类似地，我们还会频繁遇到
+\[
+\mathrm{SL}(n,\mathbb{R})
+=
+\{A\in\mathrm{GL}(n,\mathbb{R}):\det A=1\},
+\]
+正交群
+\[
+\mathrm{O}(n)
+=
+\{A\in\mathrm{GL}(n,\mathbb{R}):A^{\mathsf T}A=I\},
+\]
+以及特殊正交群
+\[
+\mathrm{SO}(n)
+=
+\{A\in\mathrm{O}(n):\det A=1\}.
+\]
+
+这些矩阵李群将成为后面理解李代数和指数映射的重要例子。
+
+
+\section{李群作用}
+
+\subsection{群作用}
+
+一个群本身只是一个抽象的代数对象。要让群真正描述一个空间中的对称性，我们还需要说明群元素如何作用于这个空间。
+
+设 $G$ 是一个群，$M$ 是一个集合。
+
+\textbf{定义 2.}
+一个映射
+\[
+\theta:G\times M\to M
+\]
+称为 $G$ 在 $M$ 上的\textbf{左作用}，如果对于所有
+\[
+g_1,g_2\in G,
+\qquad
+p\in M,
+\]
+都有
+\[
+\theta(g_1,\theta(g_2,p))
+=
+\theta(g_1g_2,p)
+\]
+以及
+\[
+\theta(e,p)=p.
+\]
+
+通常简写为
+\[
+g\cdot p=\theta(g,p).
+\]
+
+于是群作用的两个条件可以写成
+\[
+g_1\cdot(g_2\cdot p)
+=
+(g_1g_2)\cdot p
+\]
+以及
+\[
+e\cdot p=p.
+\]
+
+对于固定的 $g\in G$，定义
+\[
+\theta_g:M\to M,
+\qquad
+\theta_g(p)=g\cdot p.
+\]
+
+那么
+\[
+\theta_{g_1}\circ\theta_{g_2}
+=
+\theta_{g_1g_2}.
+\]
+
+这表明一个群作用本质上是在把抽象群元素解释为 $M$ 上的变换。
+
+
+\subsection{光滑作用}
+
+如果 $G$ 是李群而 $M$ 是光滑流形，我们自然希望群作用与 $M$ 的微分结构相容。
+
+\textbf{定义 3.}
+如果
+\[
+\theta:G\times M\to M
+\]
+是光滑映射，那么称 $\theta$ 为一个\textbf{光滑群作用}。
+
+对于每一个 $g\in G$，
+\[
+\theta_g:M\to M
+\]
+实际上自动是微分同胚，因为
+\[
+\theta_{g^{-1}}
+\]
+正是它的逆映射。
+
+因此，一个光滑李群作用给出了一个映射
+\[
+G\longrightarrow\mathrm{Diff}(M),
+\]
+把群元素变成流形上的微分同胚。
+
+需要注意的是，对于一般流形 $M$，整个微分同胚群 $\mathrm{Diff}(M)$ 通常是无限维对象，因此不能简单地把它视为本文意义下的有限维李群。但一个有限维李群完全可以通过某个光滑作用嵌入或映射到这些微分同胚之中。
+
+
+\subsection{例子：$\mathrm{SO}(3)$ 对球面的作用}
+
+令
+\[
+S^2
+=
+\{x\in\mathbb{R}^3:\|x\|=1\}.
+\]
+
+$\mathrm{SO}(3)$ 自然作用在 $S^2$ 上：
+\[
+\theta:\mathrm{SO}(3)\times S^2\to S^2,
+\qquad
+\theta(R,x)=Rx.
+\]
+
+由于正交矩阵保持长度，
+\[
+\|Rx\|=\|x\|,
+\]
+所以 $Rx$ 仍然属于 $S^2$。
+
+而且对于任何 $x,y\in S^2$，总可以找到一个旋转 $R\in\mathrm{SO}(3)$ 使得
+\[
+Rx=y.
+\]
+
+因此 $\mathrm{SO}(3)$ 在 $S^2$ 上的作用是传递的。这个例子将在后面自然导向齐性空间。
+
+
+\section{左平移、右平移与不变结构}
+
+\subsection{左平移与右平移}
+
+李群自身当然也可以作用在自己上面。
+
+对于任意 $g\in G$，定义\textbf{左平移}
+\[
+L_g:G\to G,
+\qquad
+L_g(h)=gh,
+\]
+以及\textbf{右平移}
+\[
+R_g:G\to G,
+\qquad
+R_g(h)=hg.
+\]
+
+由于李群的乘法和取逆都是光滑的，
+\[
+L_g^{-1}=L_{g^{-1}},
+\qquad
+R_g^{-1}=R_{g^{-1}},
+\]
+所以 $L_g$ 和 $R_g$ 都是微分同胚。
+
+这一点是李群定义本身带来的结果，而不是李群额外需要满足的某种“左不变性”或“右不变性”。
+
+
+\subsection{什么叫做左不变}
+
+真正具有“左不变”或“右不变”性质的，通常是定义在李群上的附加几何对象，例如向量场、微分形式或黎曼度量。
+
+例如，设 $X$ 是 $G$ 上的向量场。
+
+我们称 $X$ 是\textbf{左不变向量场}，如果
+\[
+(dL_g)_hX_h
+=
+X_{gh}
+\]
+对于所有 $g,h\in G$ 都成立。
+
+类似地，如果
+\[
+(dR_g)_hX_h
+=
+X_{hg},
+\]
+则称 $X$ 是右不变向量场。
+
+左不变性的重要意义在于，一个左不变向量场实际上完全由单位元
+\[
+e\in G
+\]
+处的一个切向量决定。
+
+事实上，如果
+\[
+X_e\in T_eG,
+\]
+那么对于任意 $g\in G$，必然有
+\[
+X_g
+=
+(dL_g)_eX_e.
+\]
+
+这条观察正是李群与李代数建立联系的关键。
+
+
+\section{轨道与稳定子群}
+
+\subsection{轨道}
+
+设李群 $G$ 光滑作用在流形 $M$ 上。
+
+对于固定的 $p\in M$，定义轨道映射
+\[
+\Phi_p:G\to M,
+\qquad
+\Phi_p(g)=g\cdot p.
+\]
+
+\textbf{定义 4.}
+点 $p$ 的\textbf{轨道}（orbit）定义为
+\[
+G\cdot p
+=
+\{g\cdot p:g\in G\}.
+\]
+
+轨道描述的是，从 $p$ 出发，在群中允许的所有对称变换作用下能够到达哪些点。
+
+
+\subsection{稳定子群}
+
+\textbf{定义 5.}
+点 $p\in M$ 的\textbf{稳定子群}（stabilizer subgroup），也称迷向子群（isotropy subgroup），定义为
+\[
+G_p
+=
+\{g\in G:g\cdot p=p\}.
+\]
+
+显然
+\[
+G_p<G.
+\]
+
+由于
+\[
+G_p=\Phi_p^{-1}(\{p\}),
+\]
+而流形中的单点集是闭集，因此 $G_p$ 是 $G$ 的闭子群。
+
+由闭子群定理，$G_p$ 本身具有自然的李群结构。
+
+
+\subsection{轨道与商空间}
+
+如果
+\[
+g_1\cdot p=g_2\cdot p,
+\]
+那么
+\[
+g_2^{-1}g_1\cdot p=p,
+\]
+所以
+\[
+g_2^{-1}g_1\in G_p.
+\]
+
+等价地，
+\[
+g_1G_p=g_2G_p.
+\]
+
+因此，同一个轨道点对应于 $G$ 中同一个左陪集。
+
+这给出了自然映射
+\[
+G/G_p\longrightarrow G\cdot p,
+\qquad
+gG_p\longmapsto g\cdot p.
+\]
+
+在轨道的自然光滑结构下，这个映射是微分同胚。因此可以把轨道理解成商空间
+\[
+G\cdot p\cong G/G_p.
+\]
+
+
+\subsection{轨道的维数}
+
+由于
+\[
+G\cdot p\cong G/G_p,
+\]
+轨道的维数满足
+\[
+\boxed{
+\dim(G\cdot p)
+=
+\dim G-\dim G_p
+}.
+\]
+
+这个公式有非常清晰的几何意义。
+
+$\dim G$ 表示群本身提供的无穷小变换自由度，而 $\dim G_p$ 表示其中有多少变换虽然发生在群中，却不会移动点 $p$。剩下的自由度才真正产生沿轨道方向的运动。
+
+更具体地，轨道映射
+\[
+\Phi_p:G\to M
+\]
+在单位元处的微分为
+\[
+(d\Phi_p)_e:T_eG\to T_pM.
+\]
+
+其核恰好是稳定子群的李代数：
+\[
+\ker(d\Phi_p)_e
+=
+T_eG_p.
+\]
+
+因此由秩--零化度定理，
+\[
+\dim\operatorname{im}(d\Phi_p)_e
+=
+\dim G-\dim G_p.
+\]
+
+而
+\[
+\operatorname{im}(d\Phi_p)_e
+=
+T_p(G\cdot p),
+\]
+这就解释了轨道维数公式。
+
+
+\section{齐性空间}
+
+\textbf{定义 6.}
+如果李群 $G$ 在非空流形 $M$ 上存在一个传递的光滑作用，即对于任意
+\[
+p,q\in M
+\]
+都存在 $g\in G$ 使得
+\[
+g\cdot p=q,
+\]
+那么称 $M$ 是一个 $G$-\textbf{齐性空间}（homogeneous space）。
+
+“齐性”的含义在于，从群作用的角度看，空间中没有一个点具有特殊地位：任何一点都可以通过某个对称变换移动到另一个点。
+
+选定 $p\in M$ 并令
+\[
+H=G_p,
+\]
+那么因为作用是传递的，
+\[
+M=G\cdot p,
+\]
+于是
+\[
+M\cong G/H.
+\]
+
+因此，齐性空间与李群的商空间密切相关。
+
+反过来，如果 $H$ 是李群 $G$ 的闭子群，那么商空间
+\[
+G/H
+\]
+可以自然赋予光滑流形结构，并且 $G$ 通过
+\[
+g\cdot(g'H)
+=
+(gg')H
+\]
+传递地作用在 $G/H$ 上。
+
+投影
+\[
+\pi:G\to G/H
+\]
+还是一个光滑满射次浸（surjective submersion）。事实上，
+\[
+H\hookrightarrow G\longrightarrow G/H
+\]
+构成一个自然的主 $H$-丛。
+
+例如，
+\[
+S^2
+\cong
+\mathrm{SO}(3)/\mathrm{SO}(2).
+\]
+
+这是因为 $\mathrm{SO}(3)$ 可以把球面上的任意一点旋转到任意另一点，而固定北极不动的旋转正好构成一个与 $\mathrm{SO}(2)$ 同构的稳定子群。
+
+
+\section{从流形到李代数}
+
+\subsection{切向量}
+
+为了从李群得到李代数，我们首先需要回到光滑流形上的切空间。
+
+设 $M$ 是一个光滑流形，$p\in M$。
+
+一种坐标无关的切向量定义方式，是把切向量理解为作用在光滑函数上的导子。
+
+\textbf{定义 7.}
+一个线性映射
+\[
+v:C^\infty(M)\to\mathbb{R}
+\]
+称为 $p$ 处的切向量，如果对于任意
+\[
+f,g\in C^\infty(M)
+\]
+满足 Leibniz 法则
+\[
+v(fg)
+=
+f(p)v(g)+g(p)v(f).
+\]
+
+所有 $p$ 处切向量组成一个向量空间，记为
+\[
+T_pM.
+\]
+
+如果
+\[
+\dim M=n,
+\]
+那么
+\[
+\dim T_pM=n.
+\]
+
+把所有点处的切空间放在一起，可以得到切丛
+\[
+TM
+=
+\bigsqcup_{p\in M}T_pM.
+\]
+
+它本身也是一个光滑流形，并配有自然投影
+\[
+\pi:TM\to M.
+\]
+
+
+\subsection{向量场}
+
+\textbf{定义 8.}
+流形 $M$ 上的一个\textbf{光滑向量场}是一个光滑截面
+\[
+X:M\to TM
+\]
+满足
+\[
+\pi\circ X=\operatorname{id}_M.
+\]
+
+也就是说，
+\[
+X(p)\in T_pM
+\]
+对于每一个 $p\in M$ 都成立，并且这些切向量随 $p$ 光滑变化。
+
+所有光滑向量场组成的集合记为
+\[
+\mathfrak{X}(M).
+\]
+
+它不仅是一个实向量空间，而且是 $C^\infty(M)$ 上的模。
+
+如果
+\[
+f\in C^\infty(M),
+\qquad
+X\in\mathfrak{X}(M),
+\]
+那么可以定义
+\[
+(fX)_p=f(p)X_p.
+\]
+
+另一方面，由于每个 $X_p$ 本身是一个导子，向量场 $X$ 也可以作用在光滑函数上：
+\[
+Xf:M\to\mathbb{R},
+\qquad
+(Xf)(p)=X_p(f).
+\]
+
+因此需要区分
+\[
+fX
+\]
+和
+\[
+Xf.
+\]
+
+前者是向量场，后者是光滑实值函数。
+
+
+\section{李括号}
+
+两个向量场之间存在一个非常自然的运算。
+
+\textbf{定义 9.}
+对于
+\[
+X,Y\in\mathfrak{X}(M),
+\]
+定义它们的\textbf{李括号}为向量场
+\[
+[X,Y]
+\]
+满足
+\[
+[X,Y]f
+=
+X(Yf)-Y(Xf)
+\]
+对于所有
+\[
+f\in C^\infty(M)
+\]
+成立。
+
+在局部坐标
+\[
+(x^1,\ldots,x^n)
+\]
+中，如果
+\[
+X
+=
+\sum_{i=1}^{n}
+X^i\frac{\partial}{\partial x^i},
+\qquad
+Y
+=
+\sum_{i=1}^{n}
+Y^i\frac{\partial}{\partial x^i},
+\]
+那么
+\[
+[X,Y]
+=
+\sum_{k=1}^{n}
+\left(
+\sum_{i=1}^{n}
+X^i\frac{\partial Y^k}{\partial x^i}
+-
+Y^i\frac{\partial X^k}{\partial x^i}
+\right)
+\frac{\partial}{\partial x^k}.
+\]
+
+李括号衡量两个无穷小流动彼此不交换的程度。
+
+它具有以下基本性质。对于
+\[
+X,Y,Z\in\mathfrak{X}(M),
+\qquad
+a,b\in\mathbb{R},
+\]
+有：
+
+\begin{enumerate}
+    \item 双线性：
+    \[
+    [aX+bY,Z]
+    =
+    a[X,Z]+b[Y,Z],
+    \]
+    \[
+    [Z,aX+bY]
+    =
+    a[Z,X]+b[Z,Y].
+    \]
+
+    \item 反对称性：
+    \[
+    [X,Y]=-[Y,X].
+    \]
+
+    \item Jacobi 恒等式：
+    \[
+    [X,[Y,Z]]
+    +
+    [Y,[Z,X]]
+    +
+    [Z,[X,Y]]
+    =
+    0.
+    \]
+\end{enumerate}
+
+此外，对于
+\[
+f,g\in C^\infty(M),
+\]
+有
+\[
+[fX,gY]
+=
+fg[X,Y]
++
+f(Xg)Y
+-
+g(Yf)X.
+\]
+
+特别值得注意的是，李括号对于实数是双线性的，但一般并不是关于 $C^\infty(M)$ 双线性的。这一点反映了李括号本质上包含微分信息。
+
+
+\section{李代数}
+
+\subsection{抽象定义}
+
+\textbf{定义 10.}
+一个实\textbf{李代数}（Lie algebra）是一个实向量空间 $\mathfrak{g}$，配备一个双线性运算
+\[
+[\cdot,\cdot]:
+\mathfrak{g}\times\mathfrak{g}
+\to
+\mathfrak{g},
+\]
+称为李括号，并满足
+
+\[
+[X,Y]=-[Y,X]
+\]
+以及 Jacobi 恒等式
+\[
+[X,[Y,Z]]
++
+[Y,[Z,X]]
++
+[Z,[X,Y]]
+=
+0.
+\]
+
+因此
+\[
+\mathfrak{X}(M)
+\]
+本身就是一个李代数，虽然通常是无限维的。
+
+
+\subsection{李群的李代数}
+
+现在终于可以解释为什么一个李群自然对应一个李代数。
+
+设 $G$ 是李群，$e$ 是其单位元。
+
+对于任意
+\[
+X\in T_eG,
+\]
+可以定义一个左不变向量场
+\[
+\widetilde{X}_g
+=
+(dL_g)_eX.
+\]
+
+反过来，每一个左不变向量场都完全由它在单位元处的值决定。因此
+\[
+T_eG
+\]
+与 $G$ 上所有左不变向量场之间存在自然的一一对应。
+
+更重要的是，两个左不变向量场的李括号仍然是左不变向量场。
+
+于是对于
+\[
+X,Y\in T_eG,
+\]
+可以定义
+\[
+[X,Y]_{\mathfrak g}
+=
+[\widetilde X,\widetilde Y]_e.
+\]
+
+这样，
+\[
+T_eG
+\]
+便获得了一个李代数结构。
+
+我们把它记为
+\[
+\mathfrak g
+=
+\operatorname{Lie}(G)
+=
+T_eG.
+\]
+
+因此，“李代数是李群在单位元处的切空间”这句话虽然常见，但严格来说还少了一半内容：
+
+\[
+\boxed{
+\mathfrak g=T_eG
+\quad
+\text{并配备由左不变向量场诱导的李括号。}
+}
+\]
+
+
+\section{矩阵李群的李代数}
+
+矩阵李群使上面的抽象定义变得非常具体。
+
+\subsection{$\mathrm{GL}(n,\mathbb{R})$}
+
+由于
+\[
+\mathrm{GL}(n,\mathbb{R})
+\]
+是 $M_n(\mathbb{R})$ 的开子集，它在单位矩阵处的切空间就是
+\[
+T_I\mathrm{GL}(n,\mathbb{R})
+=
+M_n(\mathbb{R}).
+\]
+
+因此
+\[
+\mathfrak{gl}(n,\mathbb{R})
+=
+M_n(\mathbb{R}).
+\]
+
+其李括号正是矩阵交换子：
+\[
+[A,B]
+=
+AB-BA.
+\]
+
+所以矩阵乘法的不交换性，在无穷小尺度上正是由李括号记录的。
+
+
+\subsection{$\mathrm{SL}(n,\mathbb{R})$}
+
+考虑
+\[
+\mathrm{SL}(n,\mathbb{R})
+=
+\{A:\det A=1\}.
+\]
+
+取一条满足
+\[
+A(0)=I
+\]
+的光滑曲线，并设
+\[
+A'(0)=X.
+\]
+
+因为
+\[
+\det A(t)=1,
+\]
+对 $t$ 在 $0$ 处求导可得
+\[
+\operatorname{tr}(X)=0.
+\]
+
+因此
+\[
+\mathfrak{sl}(n,\mathbb{R})
+=
+\{X\in M_n(\mathbb{R}):\operatorname{tr}(X)=0\}.
+\]
+
+
+\subsection{$\mathrm{SO}(n)$}
+
+对于
+\[
+A(t)\in\mathrm{SO}(n),
+\]
+有
+\[
+A(t)^{\mathsf T}A(t)=I.
+\]
+
+若
+\[
+A(0)=I,
+\qquad
+A'(0)=X,
+\]
+则对上式求导得到
+\[
+X^{\mathsf T}+X=0.
+\]
+
+因此
+\[
+\boxed{
+\mathfrak{so}(n)
+=
+\{X\in M_n(\mathbb{R}):X^{\mathsf T}=-X\}.
+}
+\]
+
+也就是说，旋转群 $\mathrm{SO}(n)$ 的无穷小生成元恰好是反对称矩阵。
+
+特别地，
+\[
+\dim\mathfrak{so}(n)
+=
+\frac{n(n-1)}{2}.
+\]
+
+于是
+\[
+\dim\mathrm{SO}(3)=3,
+\]
+与三维空间中旋转具有三个无穷小自由度相吻合。
+
+
+\section{一参数子群与指数映射}
+
+\subsection{一参数子群}
+
+李群与李代数之间最直接的桥梁来自一参数子群。
+
+\textbf{定义 11.}
+一个光滑群同态
+\[
+\gamma:(\mathbb{R},+)\to G
+\]
+称为 $G$ 的一个\textbf{一参数子群}。
+
+因为它是群同态，
+\[
+\gamma(s+t)
+=
+\gamma(s)\gamma(t)
+\]
+以及
+\[
+\gamma(0)=e.
+\]
+
+一参数子群可以理解为在李群中沿某一个固定无穷小方向持续运动所形成的轨迹。
+
+
+\subsection{从切向量得到一参数子群}
+
+李理论的一个基本事实是：
+
+对于每一个
+\[
+X\in T_eG,
+\]
+存在唯一的一参数子群
+\[
+\gamma_X:\mathbb{R}\to G
+\]
+满足
+\[
+\gamma_X'(0)=X.
+\]
+
+于是定义李群的指数映射
+\[
+\exp:\mathfrak g\to G
+\]
+为
+\[
+\boxed{
+\exp(X)=\gamma_X(1).
+}
+\]
+
+更一般地，
+\[
+\gamma_X(t)
+=
+\exp(tX).
+\]
+
+因此
+\[
+\exp((s+t)X)
+=
+\exp(sX)\exp(tX).
+\]
+
+指数映射把单位元处的无穷小方向 $X$ 转换为李群中的有限变换。
+
+
+\subsection{矩阵指数}
+
+对于矩阵李群，指数映射就是熟悉的矩阵指数
+\[
+\exp(X)
+=
+e^X
+=
+\sum_{k=0}^{\infty}\frac{X^k}{k!}.
+\]
+
+例如，如果
+\[
+X\in\mathfrak{so}(n),
+\]
+那么
+\[
+X^{\mathsf T}=-X.
+\]
+
+于是
+\[
+(e^X)^{\mathsf T}
+=
+e^{X^{\mathsf T}}
+=
+e^{-X}
+=
+(e^X)^{-1},
+\]
+从而
+\[
+e^X\in\mathrm{O}(n).
+\]
+
+同时
+\[
+\det(e^X)
+=
+e^{\operatorname{tr}X}
+=
+1,
+\]
+因为反对称矩阵的迹为零。因此
+\[
+e^X\in\mathrm{SO}(n).
+\]
+
+这说明
+\[
+\exp:
+\mathfrak{so}(n)
+\to
+\mathrm{SO}(n)
+\]
+确实把无穷小旋转生成元映射成有限旋转。
+
+
+\section{指数映射的局部性质}
+
+指数映射具有几个非常重要的基本性质。
+
+首先，
+\[
+\exp(0)=e.
+\]
+
+其次，它在原点的微分满足
+\[
+(d\exp)_0
+=
+\operatorname{id}_{\mathfrak g}.
+\]
+
+因此由逆函数定理，存在 $0\in\mathfrak g$ 的某个邻域 $U$ 和 $e\in G$ 的某个邻域 $V$，使得
+\[
+\exp:U\to V
+\]
+是微分同胚。
+
+这正是“李代数描述李群在单位元附近的局部结构”的严格含义之一。
+
+但是需要特别注意，指数映射通常\textbf{不是群同态}。
+
+一般而言，
+\[
+\exp(X+Y)
+\neq
+\exp(X)\exp(Y).
+\]
+
+当
+\[
+[X,Y]=0
+\]
+时，才有
+\[
+\exp(X+Y)
+=
+\exp(X)\exp(Y).
+\]
+
+如果 $X$ 与 $Y$ 不交换，那么二者之间的偏差由李括号控制。局部地，Baker--Campbell--Hausdorff 公式给出
+\[
+\log(\exp X\exp Y)
+=
+X+Y
++
+\frac12[X,Y]
++
+\frac1{12}[X,[X,Y]]
++
+\frac1{12}[Y,[Y,X]]
++\cdots.
+\]
+
+这个公式非常重要，因为它明确展示了李括号为什么能够编码李群乘法在单位元附近的非交换结构。
+
+从这个意义上说，李代数并不是简单地把李群“线性化”。它还通过
+\[
+[X,Y]
+\]
+保留了群乘法在一阶线性结构之外最关键的非交换信息。
+
+
+\section{局部结构与全局结构}
+
+李代数能够非常有效地描述李群在单位元附近的局部结构，但它并不能完整恢复李群的全局拓扑。
+
+例如，
+\[
+\mathrm{SU}(2)
+\]
+和
+\[
+\mathrm{SO}(3)
+\]
+并不是同一个李群。
+
+事实上，
+\[
+\mathrm{SU}(2)
+\]
+是单连通的，而
+\[
+\mathrm{SO}(3)
+\]
+不是单连通的，并且存在一个二重覆盖
+\[
+\mathrm{SU}(2)\longrightarrow\mathrm{SO}(3).
+\]
+
+但是它们的李代数却同构：
+\[
+\mathfrak{su}(2)
+\cong
+\mathfrak{so}(3).
+\]
+
+因此可以粗略地说：
+
+\[
+\boxed{
+\text{李代数决定李群的局部无穷小结构，
+但不能单独决定全部全局拓扑。}
+}
+\]
+
+这一区分在后续研究李群的覆盖空间、基本群以及表示理论时会变得尤其重要。
+
+
+\section{总结}
+
+现在可以重新整理本文的主线。
+
+一个李群 $G$ 首先是一个同时具有群结构和光滑流形结构的对象。群结构描述对称变换如何复合，而光滑结构使我们能够研究连续变化以及无穷小变换。
+
+对于李群中的单位元 $e$，切空间
+\[
+T_eG
+\]
+记录单位元附近所有可能的无穷小运动方向。
+
+通过左平移，每一个
+\[
+X\in T_eG
+\]
+都唯一延拓成整个李群上的左不变向量场
+\[
+\widetilde X_g=(dL_g)_eX.
+\]
+
+向量场之间自然存在李括号，因此 $T_eG$ 也继承了一个括号运算：
+\[
+[X,Y]_{\mathfrak g}
+=
+[\widetilde X,\widetilde Y]_e.
+\]
+
+于是得到李群对应的李代数
+\[
+\mathfrak g
+=
+\operatorname{Lie}(G)
+=
+T_eG.
+\]
+
+最后，指数映射
+\[
+\exp:\mathfrak g\to G
+\]
+把李代数中的无穷小生成元变成李群中的有限变换。
+
+整条关系可以概括为
+\[
+\boxed{
+G
+\longrightarrow
+T_eG=\mathfrak g
+\overset{\exp}{\longrightarrow}
+G.
+}
+\]
+
+其中，第一步提取李群在单位元处的无穷小结构；第二步则通过一参数子群，把一个无穷小方向重新积分成有限的连续变换。
+
+在矩阵李群中，这套理论变得尤其具体。例如
+\[
+\mathrm{SO}(n)
+\quad\longleftrightarrow\quad
+\mathfrak{so}(n)
+=
+\{X:X^{\mathsf T}=-X\},
+\]
+而指数映射就是矩阵指数
+\[
+X\longmapsto e^X.
+\]
+
+因此，李群和李代数并不是两套彼此独立的理论。李群研究连续对称性的整体结构，而李代数研究这些对称性的无穷小结构。二者之间的来回转换，构成了整个李理论最基本的思想框架。
+
+\end{CJK*}
+\end{document}

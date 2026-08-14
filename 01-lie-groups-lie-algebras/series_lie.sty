@@ -1,0 +1,41 @@
+% ============================================================
+%  Layer 2: Series Identity
+%  Lie Groups and Lie Algebras
+%
+%  Royal blue accent. Diamond motif (reflecting symmetry/structure).
+%  Same Layer 1 (math_article.sty) as all other series.
+% ============================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{series_lie}[2026/08/14 Lie Series Identity]
+
+% --- Series Colors: Royal Blue ---
+\definecolor{lie-blue}{HTML}{1B4F9E}
+\definecolor{lie-sky}{HTML}{5B8FD4}
+\definecolor{lie-tint}{HTML}{E8EFF8}
+
+% --- Assign to design-system tokens ---
+\renewcommand{\SeriesAccent}{lie-blue}
+\renewcommand{\SeriesSecondary}{lie-sky}
+\renewcommand{\SeriesTint}{lie-tint}
+
+% --- Series Metadata ---
+\renewcommand{\SeriesName}{Lie Groups and Lie Algebras}
+\renewcommand{\SeriesShortName}{Lie}
+
+% --- Diamond Lattice Motif ---
+% A pattern of small rotated squares (diamonds) suggesting
+% algebraic structure and symmetry groups.
+\renewcommand{\SeriesMotif}{%
+  \begin{tikzpicture}[x=1pt, y=1pt]
+    \foreach \i in {0,1,...,7} {
+      \draw[lie-blue, opacity=0.2, line width=0.6pt, rotate=45]
+        ({\i*13}, 0) rectangle ++(5,5);
+    }
+    \foreach \i in {0,1,...,6} {
+      \draw[lie-sky, opacity=0.12, line width=0.5pt, rotate=45]
+        ({\i*13+6.5}, 4) rectangle ++(4,4);
+    }
+  \end{tikzpicture}%
+}
+
+\endinput
