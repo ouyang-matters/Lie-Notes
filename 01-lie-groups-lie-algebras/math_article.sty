@@ -298,8 +298,10 @@
     %
     % Large tinted diamond (rotated square): top-right, partially clipped.
     \fill[\SeriesTint, opacity=0.9]
-      ([xshift=0.3in, yshift=-1.2in] current page.north east)
-      ++(0,4.2in) -- ++(4.2in,-4.2in) -- ++(0,-4.2in) -- ++(-4.2in,4.2in) -- cycle;
+      ([xshift=-1.5in, yshift=1.5in] current page.north east) --
+      ([xshift=1.5in, yshift=-1.5in] current page.north east) --
+      ([xshift=-1.5in, yshift=-4.5in] current page.north east) --
+      ([xshift=-4.5in, yshift=-1.5in] current page.north east) -- cycle;
     %
   \end{tikzpicture}%
   %
