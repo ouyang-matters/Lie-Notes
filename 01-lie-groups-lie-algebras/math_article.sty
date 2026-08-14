@@ -296,12 +296,10 @@
   % --- Background geometry (TikZ overlay, behind everything) ---
   \begin{tikzpicture}[remember picture, overlay]
     %
-    % Large tinted circle: top-right, partially clipped.
-    % Larger radius, center pulled down so the visible arc
-    % covers more of the right margin. Stops above Contents.
+    % Large tinted diamond (rotated square): top-right, partially clipped.
     \fill[\SeriesTint, opacity=0.75]
       ([xshift=0.6in, yshift=-0.8in] current page.north east)
-      circle (3.4in);
+      ++(0,3.4in) -- ++(3.4in,-3.4in) -- ++(0,-3.4in) -- ++(-3.4in,3.4in) -- cycle;
     %
   \end{tikzpicture}%
   %
