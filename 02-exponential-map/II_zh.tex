@@ -1,0 +1,696 @@
+\documentclass[11pt]{article}
+
+\usepackage{CJKutf8}
+\usepackage{math_article}
+\usepackage{series_lie}
+
+\renewcommand{\ArticleNumeral}{II}
+\renewcommand{\ArticleTitle}{指数映射}
+\renewcommand{\ArticleAuthor}{Anqiao Ouyang \textperiodcentered\ F.\ M.}
+\renewcommand{\ArticleDate}{September 2026}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+\maketitle
+
+\section*{引言}
+
+在第一篇中，我们从李群 $G$ 出发，取单位元处的切空间，把每个切向量延拓成左不变向量场，得到李代数
+\[
+\mathfrak{g} = \mathrm{Lie}(G) = T_eG.
+\]
+
+本篇沿相反方向往回走。给定一个无穷小方向
+\[
+X \in \mathfrak{g},
+\]
+
+它如何在 $G$ 中生成真正的运动？
+
+第一篇中我们说过：对每个 $X \in T_eG$，存在唯一的一参数子群 $\gamma_X$ 满足 $\gamma_X'(0) = X$，并令 $\exp(X) = \gamma_X(1)$。这句话当时只是陈述，并没有证明。本篇先证明它，再看由它能推出什么。路线是
+\[
+X \in \mathfrak{g}
+\;\longrightarrow\;
+\widetilde{X}
+\;\longrightarrow\;
+\text{过 } e \text{ 的积分曲线}
+\;\longrightarrow\;
+\gamma_X : \mathbb{R} \to G
+\;\longrightarrow\;
+\exp(X) = \gamma_X(1).
+\]
+
+因此，指数映射是内蕴地定义的：它来自在 $G$ 上解一个微分方程。矩阵幂级数
+\[
+e^X = \sum_{k=0}^{\infty} \frac{X^k}{k!}
+\]
+
+要到后面才出现，作为 $G$ 是矩阵群时这个方程的解。
+
+文章最后一部分讨论 $\exp(X + Y) = \exp(X)\exp(Y)$ 是否成立。一般并不成立，而第一个修正项恰好是李括号。这一观察直接通向伴随表示，也就是第三篇的主题。
+
+\section{左不变向量场}
+
+回忆第一篇：$G$ 上的向量场 $V$ 称为\textbf{左不变}的，如果对所有 $g, h \in G$ 有
+\[
+(dL_g)_h V_h = V_{gh},
+\]
+
+其中 $L_g(h) = gh$。对 $X \in T_eG$，第一篇定义了
+\[
+\widetilde{X}_g = (dL_g)_e X.
+\]
+
+记 $\mathfrak{X}^L(G)$ 为 $G$ 上全体左不变光滑向量场，它是一个实向量空间。
+
+\textbf{命题 1.} 对每个 $X \in T_eG$，向量场 $\widetilde{X}$ 是光滑且左不变的。映射
+\[
+T_eG \longrightarrow \mathfrak{X}^L(G), \qquad X \longmapsto \widetilde{X}
+\]
+
+是线性同构，其逆为 $V \mapsto V_e$。
+
+\textbf{证明.} 左不变性来自链式法则与 $L_g \circ L_h = L_{gh}$：
+\[
+(dL_g)_h \widetilde{X}_h = (dL_g)_h (dL_h)_e X = d(L_g \circ L_h)_e X = (dL_{gh})_e X = \widetilde{X}_{gh}.
+\]
+
+光滑性：把 $L_g$ 写成 $m \circ i_g$，其中 $i_g(h) = (g, h)$。于是 $(di_g)_e X = (0_g, X)$，从而
+\[
+\widetilde{X}_g = dm_{(g, e)}(0_g, X).
+\]
+
+映射 $g \mapsto (0_g, X) \in T(G \times G)$ 是光滑的，而 $m$ 光滑，故 $dm$ 光滑。因此 $\widetilde{X}$ 光滑。
+
+$X \mapsto \widetilde{X}$ 显然是线性的，并且 $\widetilde{X}_e = X$。反过来，若 $V$ 左不变，在定义中取 $h = e$ 得
+\[
+V_g = (dL_g)_e V_e = \widetilde{(V_e)}_g,
+\]
+
+所以 $V$ 由 $V_e$ 完全确定。$\square$
+
+于是作为向量空间，
+\[
+\mathfrak{g} \cong \mathfrak{X}^L(G).
+\]
+
+第一篇用这个等同把向量场的括号搬到 $T_eG$ 上。本篇换一种用法：向量场可以\textbf{积分}，而单位元处的一个孤立向量不能。$X$ 所生成的任何运动，都只能来自对 $\widetilde{X}$ 的积分。
+
+\section{一参数子群}
+
+\subsection{积分曲线}
+
+\textbf{定义 2.} 设 $V$ 是流形 $M$ 上的光滑向量场，$J \subseteq \mathbb{R}$ 是开区间。光滑曲线 $\gamma : J \to M$ 称为 $V$ 的\textbf{积分曲线}，如果对所有 $t \in J$ 有
+\[
+\gamma'(t) = V_{\gamma(t)}.
+\]
+
+在局部坐标下，这是一个一阶自治常微分方程组。下面要用到三条标准事实，它们来自此类方程组解的存在唯一性定理以及解对初值的光滑依赖性：
+
+\begin{enumerate}
+  \item 对每个 $p \in M$，存在\textbf{极大}积分曲线 $\gamma_p : J_p \to M$，满足 $\gamma_p(0) = p$，其中 $J_p$ 是包含 $0$ 的开区间；任何在时刻 $0$ 从 $p$ 出发的积分曲线都是 $\gamma_p$ 的限制。
+  \item 定义在同一开区间上的两条积分曲线，若在某一时刻相等，则在整个区间上相等。
+  \item \textbf{流} $\theta(t, p) = \gamma_p(t)$ 定义在 $\mathbb{R} \times M$ 的某个开子集上，并在其上光滑。
+\end{enumerate}
+
+若对每个 $p$ 都有 $J_p = \mathbb{R}$，则称 $V$ 是\textbf{完备}的。
+
+若 $\gamma$ 是积分曲线，则它的每个时间平移 $t \mapsto \gamma(t + s)$ 也是积分曲线，因为方程 $\gamma'(t) = V_{\gamma(t)}$ 不显含 $t$。左不变向量场还多一种对称性。
+
+\textbf{引理 3.} 设 $X \in \mathfrak{g}$，$\gamma : J \to G$ 是 $\widetilde{X}$ 的积分曲线，$g \in G$。则 $L_g \circ \gamma$ 也是 $\widetilde{X}$ 的积分曲线。
+
+\textbf{证明.} 由链式法则与左不变性，
+\[
+(L_g \circ \gamma)'(t) = (dL_g)_{\gamma(t)} \gamma'(t) = (dL_g)_{\gamma(t)} \widetilde{X}_{\gamma(t)} = \widetilde{X}_{g\gamma(t)}. \qquad \square
+\]
+
+也就是说，过 $g$ 的积分曲线就是过 $e$ 的积分曲线左平移 $g$。关于 $\widetilde{X}$ 的一切，在单位元附近就已经看得见。
+
+\subsection{完备性}
+
+一般向量场的积分曲线可能在有限时间内跑到无穷远；开区间 $(0, 1)$ 上的 $\partial/\partial x$ 就是一例。左不变向量场不会这样。
+
+\textbf{命题 4.} 李群上的每个左不变向量场都是完备的。
+
+\textbf{证明.} 设 $X \in \mathfrak{g}$。由事实 1，存在 $\varepsilon > 0$，使 $\widetilde{X}$ 过 $e$ 的积分曲线 $\gamma_e$ 在 $(-\varepsilon, \varepsilon)$ 上有定义。由引理 3，对每个 $g \in G$，曲线 $t \mapsto g\gamma_e(t)$ 是过 $g$ 的积分曲线，定义在同一区间上。关键在于 $\varepsilon$ 与 $g$ 无关。
+
+设 $\gamma : (a, b) \to G$ 是一条极大积分曲线，并假设 $b < \infty$。取
+\[
+s \in (a, b), \qquad s > b - \varepsilon,
+\]
+
+并定义 $\delta : (a, s + \varepsilon) \to G$ 为
+\[
+\delta(t) =
+\begin{cases}
+\gamma(t), & t \in (a, b), \\
+\gamma(s)\, \gamma_e(t - s), & t \in (s - \varepsilon, s + \varepsilon).
+\end{cases}
+\]
+
+两个表达式都是积分曲线（后者由引理 3 与时间平移得到），并且在 $t = s$ 时都等于 $\gamma(s)$。由事实 2，它们在重叠部分 $(a, b) \cap (s - \varepsilon, s + \varepsilon)$ 上一致，而这是一个包含 $s$ 的开区间。于是 $\delta$ 是 $(a, s + \varepsilon)$ 上一条定义良好的积分曲线，且 $s + \varepsilon > b$，与 $\gamma$ 的极大性矛盾。故 $b = \infty$；同理 $a = -\infty$。$\square$
+
+\subsection{一参数子群}
+
+对 $X \in \mathfrak{g}$，记
+\[
+\gamma_X : \mathbb{R} \to G
+\]
+
+为 $\widetilde{X}$ 满足 $\gamma_X(0) = e$ 的极大积分曲线。由命题 4，它在整个 $\mathbb{R}$ 上有定义。
+
+回忆第一篇的定义 11：$G$ 的一参数子群是光滑群同态 $(\mathbb{R}, +) \to G$。
+
+\textbf{定理 5.} 对每个 $X \in \mathfrak{g}$ 以及所有 $s, t \in \mathbb{R}$，
+\[
+\boxed{\gamma_X(s + t) = \gamma_X(s)\, \gamma_X(t).}
+\]
+
+因此 $\gamma_X$ 是 $G$ 的一参数子群，且 $\gamma_X'(0) = X$。
+
+\textbf{证明.} 固定 $s \in \mathbb{R}$，考虑两条曲线
+\[
+\alpha(t) = \gamma_X(s + t), \qquad \beta(t) = \gamma_X(s)\, \gamma_X(t), \qquad t \in \mathbb{R}.
+\]
+$\alpha$ 是 $\gamma_X$ 的时间平移，$\beta = L_{\gamma_X(s)} \circ \gamma_X$；由引理 3 之前的说明和引理 3 本身，二者都是 $\widetilde{X}$ 在 $\mathbb{R}$ 上的积分曲线。在 $t = 0$ 处，
+\[
+\alpha(0) = \gamma_X(s) = \gamma_X(s)\, e = \beta(0).
+\]
+
+由事实 2，$\alpha = \beta$。最后，积分曲线是光滑的，所以 $\gamma_X$ 光滑，并且 $\gamma_X'(0) = \widetilde{X}_e = X$。$\square$
+
+用文字来说：沿 $\widetilde{X}$ 流动时间 $s + t$，等于先流动时间 $s$，再从新起点 $\gamma_X(s)$ 出发流动时间 $t$。由于 $\widetilde{X}$ 左不变，“从 $\gamma_X(s)$ 出发流动”等于从 $e$ 出发流动后再左乘 $\gamma_X(s)$。同态性质说的就是这件事。
+
+反方向同样成立：一参数子群由它的初速度决定。
+
+\textbf{命题 6.} 设 $\gamma : \mathbb{R} \to G$ 是一参数子群，令 $X = \gamma'(0)$。则 $\gamma$ 是 $\widetilde{X}$ 的积分曲线，从而
+\[
+\gamma = \gamma_X.
+\]
+
+\textbf{证明.} 固定 $s$，同态性质给出 $\gamma(s + t) = L_{\gamma(s)}(\gamma(t))$。对 $t$ 在 $t = 0$ 处求导，
+\[
+\gamma'(s) = (dL_{\gamma(s)})_e\, \gamma'(0) = \widetilde{X}_{\gamma(s)}.
+\]
+
+所以 $\gamma$ 是 $\widetilde{X}$ 在 $\mathbb{R}$ 上满足 $\gamma(0) = e$ 的积分曲线，由事实 2 得 $\gamma = \gamma_X$。$\square$
+
+定理 5 给出存在性，命题 6 给出唯一性。二者合起来，证明了第一篇当作已知的那句话：
+\[
+\boxed{
+\mathfrak{g}
+\;\longleftrightarrow\;
+\{G \text{ 的一参数子群}\},
+\qquad
+X \longmapsto \gamma_X, \qquad \gamma \longmapsto \gamma'(0).
+}
+\]
+
+单位元处的每个方向恰好生成一个一参数子群，而每个一参数子群都以这种方式产生。
+
+\section{指数映射}
+
+\textbf{定义 7.} $G$ 的\textbf{指数映射}是
+\[
+\exp : \mathfrak{g} \to G, \qquad \exp(X) = \gamma_X(1).
+\]
+
+定义只用到时刻 $1$，曲线的其余部分可以通过伸缩恢复。
+
+\textbf{命题 8.} 对 $X \in \mathfrak{g}$ 以及 $c, t \in \mathbb{R}$，
+\[
+\gamma_{cX}(t) = \gamma_X(ct).
+\]
+
+因此
+\[
+\boxed{\exp(tX) = \gamma_X(t)},
+\]
+
+并且对所有 $s, t \in \mathbb{R}$ 与 $n \in \mathbb{Z}$，
+\[
+\begin{gathered}
+\exp\bigl((s + t)X\bigr) = \exp(sX) \exp(tX), \qquad \exp(0) = e, \\
+\exp(-X) = \exp(X)^{-1}, \qquad \exp(nX) = \exp(X)^n.
+\end{gathered}
+\]
+
+\textbf{证明.} 曲线 $t \mapsto \gamma_X(ct)$ 是 $\mathbb{R}$ 的同态 $t \mapsto ct$ 与 $\gamma_X$ 的复合，因而是一参数子群，并且它在 $0$ 处的速度为 $cX$。由命题 6，它等于 $\gamma_{cX}$。取 $c = t$ 并在时刻 $1$ 取值，
+\[
+\exp(tX) = \gamma_{tX}(1) = \gamma_X(t).
+\]
+
+其余等式只是定理 5 的改写：$\exp(0) = \gamma_X(0) = e$；取 $s = 1$、$t = -1$ 得 $\exp(X)\exp(-X) = e$；$\exp(nX) = \exp(X)^n$ 对 $|n|$ 归纳即得。$\square$
+
+这四个等式涉及的都只是同一个 $X$ 的倍数。集合 $\{\exp(tX) : t \in \mathbb{R}\}$ 是交换群 $\mathbb{R}$ 在同态下的像，所以无论 $G$ 是什么，它都是 $G$ 的交换子群。对于两个不同方向 $X$ 与 $Y$，目前证明的任何结论都没有涉及 $\exp(X)\exp(Y)$；这个问题留到最后两节。
+
+在研究 $\exp$ 在 $0$ 附近的行为之前，需要知道它是光滑的。
+
+\textbf{命题 9.} $\exp : \mathfrak{g} \to G$ 是光滑的。
+
+\textbf{证明.} 在流形 $G \times \mathfrak{g}$ 上考虑向量场
+\[
+V_{(g, X)} = (\widetilde{X}_g, 0) \in T_gG \oplus T_X\mathfrak{g}.
+\]
+
+由命题 1 证明中的公式 $\widetilde{X}_g = dm_{(g, e)}(0_g, X)$，$\widetilde{X}_g$ 光滑地依赖于 $(g, X)$，故 $V$ 光滑。曲线 $t \mapsto (\gamma_X(t), X)$ 是 $V$ 过 $(e, X)$ 的积分曲线，并在整个 $\mathbb{R}$ 上有定义。因此对每个 $X$，$V$ 的流 $\Theta$ 的定义域都包含 $(1, (e, X))$，并且
+\[
+\exp(X) = \mathrm{pr}_G\, \Theta\bigl(1, (e, X)\bigr).
+\]
+
+由事实 3，$\Theta$ 在其定义域上光滑，所以 $\exp$ 光滑。$\square$
+
+\section{指数映射的局部性质}
+
+由于 $\mathfrak{g}$ 是向量空间，它在 $0$ 处的切空间可以典范地等同于 $\mathfrak{g}$ 本身：$X \in \mathfrak{g}$ 对应于直线 $t \mapsto tX$ 在 $t = 0$ 处的速度。在这一等同下，$\exp$ 在原点的微分是线性映射
+\[
+(d\exp)_0 : \mathfrak{g} \to T_eG = \mathfrak{g}.
+\]
+
+\textbf{命题 10.}
+\[
+\boxed{(d\exp)_0 = \mathrm{id}_{\mathfrak{g}}.}
+\]
+
+\textbf{证明.} 对 $X \in \mathfrak{g}$，由命题 8 与定理 5，
+\[
+(d\exp)_0 X = \frac{d}{dt}\Big|_{t=0} \exp(tX) = \gamma_X'(0) = X. \qquad \square
+\]
+
+\textbf{推论 11.} 存在 $0 \in \mathfrak{g}$ 的开邻域 $U$ 与 $e \in G$ 的开邻域 $V$，使得
+\[
+\exp|_U : U \to V
+\]
+
+是微分同胚。
+
+\textbf{证明.} $\dim \mathfrak{g} = \dim G$，且 $(d\exp)_0$ 可逆；应用逆函数定理即可。$\square$
+
+记其逆映射为
+\[
+\log : V \to U.
+\]
+
+必要时缩小 $U$ 与 $V$，可以取 $U$ 为 $\mathfrak{g}$ 上某个范数下以 $0$ 为中心的球，这样当 $X \in U$、$|t| \le 1$ 时总有 $tX \in U$。
+
+几何上，取 $\mathfrak{g}$ 的一组基 $E_1, \dots, E_n$。映射
+\[
+(x^1, \dots, x^n) \longmapsto \exp\Bigl(\sum_{i=1}^n x^i E_i\Bigr)
+\]
+
+限制在相应的坐标球上，参数化了 $e$ 的一个邻域，其逆映射是一个坐标卡，称为 $e$ 处的\textbf{指数坐标}。与 $L_g$ 复合，就得到任意 $g \in G$ 附近的这种坐标卡。在指数坐标下，一参数子群恰好是过原点的直线：$\exp(tX)$ 的坐标是 $X$ 的坐标乘以 $t$。这就是第一篇所说“李代数描述李群在单位元附近的局部结构”的确切含义：$V$ 中每个元素都恰好对应唯一的 $X \in U$，使其等于 $\exp(X)$。
+
+推论 11 只断言存在\textbf{某些}邻域 $U$ 与 $V$。它既没有说明这两个邻域能取多大，也没有涉及 $\exp$ 在 $U$ 之外的行为。这两方面的限制都是真实存在的；等有了矩阵之后，下下一节会看到具体例子。
+
+\section{矩阵指数}
+
+设 $\mathbb{F} = \mathbb{R}$ 或 $\mathbb{C}$。与第一篇一样，$\mathrm{GL}(n, \mathbb{F})$ 是 $M_n(\mathbb{F})$（一个维数为 $n^2$ 或 $2n^2$ 的实向量空间）中的开集，因此是李群，并且
+\[
+\mathfrak{gl}(n, \mathbb{F}) = T_I\,\mathrm{GL}(n, \mathbb{F}) = M_n(\mathbb{F}).
+\]
+
+\subsection{微分方程}
+
+对 $g \in \mathrm{GL}(n, \mathbb{F})$，左平移 $L_g(A) = gA$ 是 $M_n(\mathbb{F})$ 上一个线性映射的限制，所以它的微分就是这个线性映射本身。于是
+\[
+\widetilde{X}_g = (dL_g)_I X = gX,
+\]
+
+一参数子群 $\gamma = \gamma_X$ 是方程
+\[
+\gamma'(t) = \gamma(t)\, X, \qquad \gamma(0) = I
+\]
+
+的解。$\gamma(t)X$ 中的乘法顺序来自左平移，不能与方程 $\gamma' = X\gamma$ 混淆；后者描述的是\textbf{右}不变向量场 $g \mapsto Xg$ 的积分曲线，见下面的注记。
+
+\subsection{幂级数}
+
+在 $M_n(\mathbb{F})$ 上取一个次乘性范数，例如算子范数，使得 $\|X^k\| \le \|X\|^k$。于是
+\[
+e^X = \sum_{k=0}^{\infty} \frac{X^k}{k!}
+\]
+
+对每个 $X$ 绝对收敛。固定 $X$，$t \mapsto e^{tX} = \sum_k t^k X^k / k!$ 是关于 $t$ 的收敛半径为无穷的幂级数，可以逐项求导：
+\[
+\frac{d}{dt} e^{tX} = \sum_{k=1}^{\infty} \frac{t^{k-1} X^k}{(k-1)!} = X e^{tX} = e^{tX} X.
+\]
+
+两种写法都成立，因为 $X$ 与每个部分和都交换。特别地，
+\[
+\frac{d}{dt}\bigl(e^{tX} e^{-tX}\bigr) = e^{tX} X e^{-tX} - e^{tX} X e^{-tX} = 0,
+\]
+
+所以 $e^{tX} e^{-tX} = I$，对所有 $t$ 都有 $e^{tX} \in \mathrm{GL}(n, \mathbb{F})$。
+
+\textbf{命题 12.} 对每个 $X \in \mathfrak{gl}(n, \mathbb{F})$，
+\[
+\boxed{\exp(X) = e^X.}
+\]
+
+更一般地，设 $G \subseteq \mathrm{GL}(n, \mathbb{F})$ 是闭子群，其李代数为 $\mathfrak{g} = T_IG \subseteq M_n(\mathbb{F})$。则对所有 $X \in \mathfrak{g}$ 与 $t \in \mathbb{R}$ 有 $e^{tX} \in G$，$G$ 的指数映射就是 $X \mapsto e^X$，并且
+\[
+\mathfrak{g} = \{ X \in M_n(\mathbb{F}) : e^{tX} \in G \text{ 对所有 } t \in \mathbb{R} \text{ 成立} \}.
+\]
+
+\textbf{证明.} 曲线 $t \mapsto e^{tX}$ 落在 $\mathrm{GL}(n, \mathbb{F})$ 中，在 $t = 0$ 时等于 $I$，并满足 $\frac{d}{dt} e^{tX} = e^{tX} X = \widetilde{X}_{e^{tX}}$。所以它就是积分曲线 $\gamma_X$，从而 $\exp(X) = \gamma_X(1) = e^X$。
+
+现在设 $G$ 是闭子群。由闭子群定理（第一篇中提到过），$G$ 是嵌入李子群，包含映射 $\iota : G \to \mathrm{GL}(n, \mathbb{F})$ 是光滑同态，其在 $I$ 处的微分就是包含 $\mathfrak{g} \subseteq M_n(\mathbb{F})$。对 $X \in \mathfrak{g}$，记 $\gamma^G_X$ 为 $G$ 中由 $X$ 生成的一参数子群。则 $\iota \circ \gamma^G_X$ 是 $\mathrm{GL}(n, \mathbb{F})$ 中初速度为 $X$ 的一参数子群，于是在 $\mathrm{GL}(n, \mathbb{F})$ 中应用命题 6 得
+\[
+\gamma^G_X(t) = e^{tX}.
+\]
+
+这给出 $e^{tX} \in G$ 以及 $\exp_G(X) = e^X$。反过来，若对所有 $t$ 有 $e^{tX} \in G$，则 $t \mapsto e^{tX}$ 是嵌入子流形 $G$ 中过 $I$ 的光滑曲线，其速度 $X$ 属于 $T_IG = \mathfrak{g}$。$\square$
+
+注意这里的逻辑顺序。指数映射在定义 7 中的定义不涉及任何级数。对矩阵群而言，定义它的微分方程恰好是线性的，而级数正是这个方程的解。第一篇中验证 $X \in \mathfrak{so}(n)$ 时 $e^X \in \mathrm{SO}(n)$ 的计算是一次直接检验；命题 12 解释了它为什么必然成功。
+
+\textbf{注.} 由于 $X$ 与 $e^{tX}$ 交换，曲线 $e^{tX}$ 也满足 $\gamma' = X\gamma$。但两个向量场 $g \mapsto gX$ 与 $g \mapsto Xg$ 并不相同，它们的流也不同：由引理 3，$\widetilde{X}$ 过 $g$ 的积分曲线是
+\[
+t \longmapsto g\, e^{tX},
+\]
+
+而 $g \mapsto Xg$ 过 $g$ 的积分曲线是 $t \mapsto e^{tX} g$。左不变向量场生成的是右乘。二者过 $I$ 的积分曲线相同，这就是一参数子群与这个选择无关的原因。
+
+\subsection{例子：GL(n, R)}
+
+当 $n = 1$ 时，$\mathrm{GL}(1, \mathbb{R}) = \mathbb{R}^\times$，$\mathfrak{gl}(1, \mathbb{R}) = \mathbb{R}$，$\exp(x) = e^x$。其像为 $(0, \infty)$，负半轴取不到。
+
+对任意 $n$ 都是如此。由于对实矩阵 $X$ 有
+\[
+\det(e^X) = e^{\operatorname{tr} X} > 0
+\]
+（第一篇用过这一公式），$\exp : \mathfrak{gl}(n, \mathbb{R}) \to \mathrm{GL}(n, \mathbb{R})$ 的像包含在 $\{ \det > 0 \}$ 中。
+
+\subsection{例子：SO(2)}
+
+$2 \times 2$ 反对称矩阵都是
+\[
+J = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}
+\]
+
+的倍数，所以 $\mathfrak{so}(2) = \mathbb{R}J$。由 $J^2 = -I$ 得 $J^{2k} = (-1)^k I$，$J^{2k+1} = (-1)^k J$。把级数按奇偶次项拆开，
+\[
+e^{tJ} = \sum_{k=0}^{\infty} \frac{(-1)^k t^{2k}}{(2k)!}\, I + \sum_{k=0}^{\infty} \frac{(-1)^k t^{2k+1}}{(2k+1)!}\, J = \cos t\, I + \sin t\, J,
+\]
+
+即
+\[
+\boxed{
+e^{tJ} = \begin{pmatrix} \cos t & -\sin t \\ \sin t & \cos t \end{pmatrix}.
+}
+\]
+
+因此 $\mathrm{SO}(2)$ 的一参数子群就是 $t \mapsto e^{taJ}$，即角速度恒为 $a$ 的旋转。
+
+生成元的含义在平面上看得很清楚。对 $x \in \mathbb{R}^2$，
+\[
+\frac{d}{dt}\Big|_{t=0} e^{tJ} x = Jx = \begin{pmatrix} -x_2 \\ x_1 \end{pmatrix},
+\]
+
+这是绕原点刚性旋转的速度场。$J$ 所记录的只是一条无穷小指令：每个点沿垂直于其位置向量的方向移动，速率等于它到原点的距离。把这条指令积分起来，就得到平面上的全部旋转。
+
+映射 $\exp : \mathfrak{so}(2) \to \mathrm{SO}(2)$ 是满射，因为每个旋转都有一个转角；但它不是单射，因为转角只在模 $2\pi$ 意义下确定：
+\[
+e^{2\pi J} = I = e^{0}.
+\]
+
+\section{局部不等于整体}
+
+推论 11 给出了 $0$ 与 $e$ 附近的局部逆。由此推不出 $\exp$ 在整个 $\mathfrak{g}$ 上是单射或满射，而这两者确实都可能不成立。
+
+\subsection{单射性的失效}
+
+令
+\[
+S^1 = \{ z \in \mathbb{C} : |z| = 1 \},
+\]
+
+它是 $\mathrm{GL}(1, \mathbb{C}) = \mathbb{C}^\times$ 的闭子群。由命题 12，其李代数由满足“对所有 $t$ 有 $|e^{tz}| = e^{t \operatorname{Re} z} = 1$”的 $z \in \mathbb{C}$ 组成，即
+\[
+\mathrm{Lie}(S^1) = i\mathbb{R}.
+\]
+
+通过 $i\theta \leftrightarrow \theta$ 把 $i\mathbb{R}$ 等同于 $\mathbb{R}$，指数映射成为
+\[
+\exp : \mathbb{R} \to S^1, \qquad \theta \longmapsto e^{i\theta},
+\]
+
+并且
+\[
+\exp(\theta + 2\pi k) = \exp(\theta), \qquad k \in \mathbb{Z}.
+\]
+
+这里的 $\exp$ 性质已经好得不能再好：它是满的群同态，并且在每一点的微分都可逆，因而处处是局部微分同胚，而不仅仅在 $0$ 处。但它仍然不是单射，其核为 $2\pi\mathbb{Z}$。逆函数定理只在 $0$ 的某个邻域上给出局部逆。在这个例子中，$(-\pi, \pi) \to S^1 \setminus \{-1\}$ 是微分同胚，而任何长度大于 $2\pi$ 的开区间都不能单射地映入 $S^1$。在同构 $e^{i\theta} \leftrightarrow e^{\theta J}$ 下，这与 $\mathrm{SO}(2)$ 中的现象完全相同。
+
+\subsection{满射性的失效}
+
+有一个显然的障碍。记 $G_0$ 为 $G$ 的单位元连通分支。
+
+\textbf{命题 13.} $\exp(\mathfrak{g}) \subseteq G_0$。并且 $\exp(\mathfrak{g})$ 生成 $G_0$：$G_0$ 的每个元素都是有限乘积
+\[
+\exp(X_1) \exp(X_2) \cdots \exp(X_k), \qquad X_1, \dots, X_k \in \mathfrak{g}.
+\]
+
+\textbf{证明.} 道路 $t \mapsto \exp(tX)$（$t \in [0, 1]$）连接 $e$ 与 $\exp(X)$，所以 $\exp(X) \in G_0$。
+
+令 $H$ 为所有指数的有限乘积组成的集合。由于 $\exp(X)^{-1} = \exp(-X)$，$H$ 是子群。若 $\alpha, \beta$ 分别是从 $e$ 到 $a$ 和从 $e$ 到 $b$ 的道路，则 $t \mapsto \alpha(t)\beta(t)$ 是从 $e$ 到 $ab$ 的道路；因此 $H \subseteq G_0$。由推论 11，$H$ 包含 $e$ 的开邻域 $V$，于是对每个 $h \in H$，开集 $hV$ 是 $h$ 在 $H$ 内的邻域，所以 $H$ 是开集。它的补集是所有 $g \notin H$ 的陪集 $gH$ 之并，每个陪集都是开的，所以 $H$ 也是闭集。$H$ 非空且既开又闭，故包含 $e$ 所在的连通分支 $G_0$。因此 $H = G_0$。$\square$
+
+所以在 $\mathrm{O}(n)$ 中，行列式为 $-1$ 的矩阵都不是指数；在 $\mathrm{GL}(n, \mathbb{R})$ 中，$\det < 0$ 的矩阵也不是，这就是上一节看到的现象。然而，连通性并不能保证满射。
+
+\textbf{命题 14.} 矩阵
+\[
+A = \begin{pmatrix} -1 & 1 \\ 0 & -1 \end{pmatrix} \in \mathrm{SL}(2, \mathbb{R})
+\]
+
+不能写成 $e^X$（$X \in \mathfrak{sl}(2, \mathbb{R})$）的形式，尽管 $\mathrm{SL}(2, \mathbb{R})$ 是连通的。
+
+\textbf{证明.} 设 $X \in \mathfrak{sl}(2, \mathbb{R})$，$\delta = \det X$。由于 $\operatorname{tr} X = 0$，Cayley–Hamilton 定理给出
+\[
+X^2 = -\delta I.
+\]
+
+与 $\mathrm{SO}(2)$ 的情形一样，把指数级数按奇偶次幂拆开：
+
+\begin{itemize}
+  \item 若 $\delta < 0$，令 $\mu = \sqrt{-\delta}$，则 $e^X = \cosh\mu\, I + \dfrac{\sinh \mu}{\mu} X$，$\operatorname{tr} e^X = 2\cosh \mu > 2$。
+  \item 若 $\delta = 0$，则 $X^2 = 0$，$e^X = I + X$，$\operatorname{tr} e^X = 2$。
+  \item 若 $\delta > 0$，令 $\nu = \sqrt{\delta}$，则 $e^X = \cos\nu\, I + \dfrac{\sin \nu}{\nu} X$，$\operatorname{tr} e^X = 2\cos \nu \ge -2$。
+\end{itemize}
+
+无论哪种情形都有 $\operatorname{tr} e^X \ge -2$，且等号只在 $\delta > 0$、$\cos \nu = -1$ 时成立。此时 $\sin \nu = 0$，$e^X = -I$。而 $\operatorname{tr} A = -2$ 且 $A \ne -I$，所以 $A \ne e^X$。
+
+至于连通性：由极分解，每个 $A \in \mathrm{SL}(2, \mathbb{R})$ 可以唯一地写成 $A = RP$，其中 $R \in \mathrm{SO}(2)$，$P$ 是行列式为 $1$ 的对称正定矩阵；这给出从 $\mathrm{SL}(2, \mathbb{R})$ 到 $\mathrm{SO}(2) \times P_1$ 的同胚，其中 $P_1$ 是所有这样的 $P$ 组成的集合。两个因子都连通：$\mathrm{SO}(2)$ 是圆周，而 $P_1$ 是无迹对称矩阵构成的向量空间在 $S \mapsto e^S$ 下的像。$\square$
+
+命题 13 仍然适用。取
+\[
+N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \in \mathfrak{sl}(2, \mathbb{R}),
+\]
+
+则 $e^{\pi J} = -I$，$e^{-N} = I - N$，所以
+\[
+A = e^{\pi J}\, e^{-N}.
+\]
+$A$ 是两个指数的乘积，却不是单个指数。一般而言，两个指数的乘积不再是一个指数。接下来两节就从这里出发：乘积 $\exp(X)\exp(Y)$ 与指数之间究竟是什么关系？
+
+$\exp$ 是否满射取决于具体的群。对紧连通李群，它是满射；这是一条标准定理，但其证明需要极大环面，暂时不在本系列的范围之内。第一篇提到的 $\mathrm{SU}(2)$ 与 $\mathrm{SO}(3)$ 在整体上的区别，同样留给单独的文章。
+
+\section{指数何时可交换}
+
+对实数有 $e^{x+y} = e^x e^y$。对同一方向上的指数，命题 8 给出 $\exp(sX)\exp(tX) = \exp((s + t)X)$。自然要问，对任意 $X, Y \in \mathfrak{g}$，
+\[
+\exp(X + Y) \stackrel{?}{=} \exp(X) \exp(Y)
+\]
+
+是否成立。
+
+\textbf{命题 15.} 若 $X, Y \in M_n(\mathbb{F})$ 满足 $XY = YX$，则
+\[
+e^{X + Y} = e^X e^Y.
+\]
+
+\textbf{证明.} 由于 $X$ 与 $Y$ 交换，二项式定理成立：
+\[
+(X + Y)^m = \sum_{k=0}^{m} \binom{m}{k} X^k Y^{m-k}.
+\]
+$e^X$ 与 $e^Y$ 的级数都绝对收敛，所以它们的乘积可以展开并按总次数重新分组：
+\[
+e^X e^Y = \sum_{j, k \ge 0} \frac{X^j Y^k}{j!\, k!} = \sum_{m=0}^{\infty} \frac{1}{m!} \sum_{k=0}^{m} \binom{m}{k} X^k Y^{m-k} = \sum_{m=0}^{\infty} \frac{(X + Y)^m}{m!} = e^{X+Y}. \qquad \square
+\]
+
+交换性只在二项式定理中用到。没有交换性时，在二次项就已经出现差别：
+\[
+\frac{(X + Y)^2}{2} = \frac{X^2 + XY + YX + Y^2}{2},
+\]
+
+而 $e^X e^Y$ 的二次部分是 $\frac{X^2}{2} + XY + \frac{Y^2}{2}$。两者相差 $\frac12(XY - YX)$。
+
+一般李群上没有幂级数，但同样的结论依然成立，原因是几何的。由引理 3 与命题 8，$\widetilde{X}$ 过 $g$ 的积分曲线是 $t \mapsto g\exp(tX)$，所以 $\widetilde{X}$ 的流为
+\[
+\theta^X_t(g) = g \exp(tX),
+\]
+
+即右乘 $\exp(tX)$。我们还要用到一条标准事实，它是第一篇中关于李括号与流的说法的精确形式：两个完备向量场的括号为零，当且仅当它们的流彼此交换。
+
+\textbf{命题 16.} 设 $G$ 是任意李群，$X, Y \in \mathfrak{g}$ 满足 $[X, Y] = 0$。则对所有 $s, t \in \mathbb{R}$，$\exp(sX)$ 与 $\exp(tY)$ 交换，并且
+\[
+\exp(X + Y) = \exp(X) \exp(Y).
+\]
+
+\textbf{证明.} 由第一篇，$[\widetilde{X}, \widetilde{Y}]$ 是左不变的，它在 $e$ 处的值为 $[X, Y] = 0$。由命题 1，它恒为零，所以流 $\theta^X_s$ 与 $\theta^Y_t$ 交换。在 $e$ 处取值，
+\[
+\exp(tY)\exp(sX) = \theta^X_s\bigl(\theta^Y_t(e)\bigr) = \theta^Y_t\bigl(\theta^X_s(e)\bigr) = \exp(sX)\exp(tY).
+\]
+
+令 $\sigma(t) = \exp(tX)\exp(tY)$。在中间一步用这一交换性，
+\[
+\sigma(s + t) = \exp(sX)\exp(tX)\exp(sY)\exp(tY) = \exp(sX)\exp(sY)\exp(tX)\exp(tY) = \sigma(s)\sigma(t),
+\]
+
+所以 $\sigma$ 是一参数子群。由于 $m(g, e) = g$，$m(e, h) = h$，有 $dm_{(e,e)}(u, v) = u + v$，从而 $\sigma'(0) = X + Y$。由命题 6，$\sigma(t) = \exp(t(X + Y))$；取 $t = 1$ 即可。$\square$
+
+对 $G = \mathrm{GL}(n, \mathbb{F})$，括号就是交换子 $XY - YX$（第一篇），命题 16 重新给出命题 15。两个证明是用不同的语言说同一件事：无穷小运动彼此交换时，有限运动也彼此交换，先沿 $X$ 再沿 $Y$ 运动就等于沿 $X + Y$ 运动。
+
+\textbf{注.} 条件 $[X, Y] = 0$ 是充分的，但不是必要的。在 $\mathrm{GL}(2, \mathbb{C})$ 中取
+\[
+X = \begin{pmatrix} 0 & 0 \\ 0 & 2\pi i \end{pmatrix}, \qquad Y = \begin{pmatrix} 0 & 1 \\ 0 & 2\pi i \end{pmatrix}.
+\]
+
+则 $[X, Y] = \begin{pmatrix} 0 & 2\pi i \\ 0 & 0 \end{pmatrix} \ne 0$。但 $X$ 是对角矩阵，故 $e^X = I$；而 $Y$ 与 $X + Y = \begin{pmatrix} 0 & 1 \\ 0 & 4\pi i \end{pmatrix}$ 各有两个互异的特征值，且都属于 $2\pi i \mathbb{Z}$，所以它们都可对角化，指数都等于 $I$。因此
+\[
+e^{X+Y} = I = e^X e^Y.
+\]
+
+真正刻画方向可交换的，是对\textbf{所有小倍数}都成立的恒等式；见下一节。
+
+\section{BCH 的初次出现}
+
+\subsection{一个小例子}
+
+在 $\mathfrak{sl}(2, \mathbb{R})$ 中取
+\[
+X = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \qquad Y = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}.
+\]
+
+由于 $X^2 = Y^2 = 0$，
+\[
+e^X e^Y = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix},
+\qquad
+e^Y e^X = \begin{pmatrix} 1 & 1 \\ 1 & 2 \end{pmatrix}.
+\]
+
+另一方面，$(X + Y)^2 = I$，所以
+\[
+e^{X+Y} = \cosh 1\, I + \sinh 1\, (X + Y) = \begin{pmatrix} \cosh 1 & \sinh 1 \\ \sinh 1 & \cosh 1 \end{pmatrix}.
+\]
+
+三个矩阵互不相同。障碍在于
+\[
+[X, Y] = XY - YX = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.
+\]
+
+\subsection{二阶展开}
+
+为了看清括号从哪里进入，把 $X, Y \in M_n(\mathbb{F})$ 换成 $sX, sY$，并对 $s$ 展开。这里 $O(s^3)$ 表示当 $|s|$ 较小时范数不超过 $C|s|^3$ 的矩阵值函数。于是
+\[
+\begin{aligned}
+e^{sX} e^{sY} &= I + s(X + Y) + s^2\Bigl(\tfrac12 X^2 + XY + \tfrac12 Y^2\Bigr) + O(s^3), \\
+e^{s(X+Y)} &= I + s(X + Y) + \tfrac12 s^2 \bigl(X^2 + XY + YX + Y^2\bigr) + O(s^3),
+\end{aligned}
+\]
+
+从而
+\[
+e^{sX} e^{sY} - e^{s(X+Y)} = \frac{s^2}{2}[X, Y] + O(s^3).
+\]
+
+两边在一阶上一致，这是必然的：它们都是过 $I$、速度为 $X + Y$ 的曲线。差别首先出现在二阶，而且恰好是交换子的一半。把这个修正加到指数上，差别就被消除了。对 $Z = s(X + Y) + \frac{s^2}{2}[X, Y]$ 展开 $e^Z$，得
+\[
+e^{s(X+Y) + \frac{s^2}{2}[X, Y]} = I + s(X+Y) + s^2\Bigl(\tfrac12 X^2 + XY + \tfrac12 Y^2\Bigr) + O(s^3),
+\]
+
+它与 $e^{sX}e^{sY}$ 在二阶以内一致。再作用推论 11 中的 $\log$（它光滑，因而在 $I$ 附近是 Lipschitz 的），得到
+\[
+\log\bigl(e^{sX} e^{sY}\bigr) = s(X + Y) + \frac{s^2}{2}[X, Y] + O(s^3).
+\]
+
+特别地，若对 $0$ 附近某个区间中的所有 $s$ 都有 $e^{sX}e^{sY} = e^{s(X+Y)}$，则 $[X, Y] = 0$。结合命题 15，对所有小倍数成立的恒等式\textbf{等价于} $[X, Y] = 0$；而单独在 $s = 1$ 处的恒等式并不等价。
+
+同样的计算作用于\textbf{群交换子}，可以把括号完全分离出来：
+\[
+e^{sX} e^{tY} e^{-sX} e^{-tY} = I + st\,[X, Y] + O\bigl((|s| + |t|)^3\bigr).
+\]
+
+验证方法是把每个因子展开到二阶。一阶项 $sX + tY - sX - tY$ 相互抵消；二阶项中，平方项 $s^2X^2$ 与 $t^2Y^2$ 也相互抵消，只剩下 $st(XY - YX)$。群交换子 $ghg^{-1}h^{-1}$ 以乘法的方式衡量 $g$ 与 $h$ 是否交换，而它的首项正是李括号。
+
+\subsection{Baker–Campbell–Hausdorff 公式}
+
+二阶计算是一个一般结论的开端。设 $G$ 是任意李群，$U$、$V$ 与 $\log$ 如推论 11。当 $X, Y$ 足够接近 $0$ 时，乘积 $\exp(X)\exp(Y)$ 落在 $V$ 中，而 \textbf{Baker–Campbell–Hausdorff 公式}断言
+\[
+\boxed{
+\log\bigl(\exp X \exp Y\bigr) = X + Y + \frac12 [X, Y] + \frac1{12}[X, [X, Y]] + \frac1{12}[Y, [Y, X]] + \cdots,
+}
+\]
+
+其中省略的项是 $X$ 与 $Y$ 的总次数至少为 $4$ 的迭代括号，系数是普适的有理数。当 $X$ 与 $Y$ 足够小时，级数收敛。
+
+这里重要的不是各个系数，而是公式的形状：在 $X + Y$ 之后，每一项都是括号。因此，用指数坐标写出的 $e$ 附近的群乘法，完全由向量空间 $\mathfrak{g}$ 及其括号决定。这就是第一篇所说“李代数决定李群的局部结构”背后的确切内容。群乘法中那些 $\mathfrak{g}$ 的线性结构记录不到的信息，恰好由括号记录。
+
+$\frac12[X, Y]$ 的符号依赖于第一篇的约定：那里 $\mathfrak{g}$ 上的括号是通过\textbf{左}不变向量场定义的；对矩阵群，这给出 $[X, Y] = XY - YX$，与上面的计算一致。若改用右不变向量场，诱导出的括号相差一个符号，公式中偶数次项的符号随之改变。
+
+公式的证明、收敛性，以及一般项的 Dynkin 显式表达式，留给一篇单独的补充文章。对主线而言，二阶项已经足够。
+
+\section{通向伴随表示}
+
+再看群交换子，把前三个因子放在一起：
+\[
+e^{sX} e^{tY} e^{-sX} e^{-tY} = \bigl(e^{sX} e^{tY} e^{-sX}\bigr)\, e^{-tY}.
+\]
+
+括号里的因子是一参数子群 $t \mapsto e^{tY}$ 被 $g = e^{sX}$ 共轭之后的结果。所以括号衡量的是：单位元附近的元素作共轭时，一参数子群被移动了多少。
+
+对任意李群，定义 $g \in G$ 的\textbf{共轭}
+\[
+C_g : G \to G, \qquad C_g(h) = g h g^{-1}.
+\]
+
+由于 $C_g = L_g \circ R_{g^{-1}}$，它是微分同胚；它还是固定 $e$ 的群自同构，所以它在单位元处的微分是 $\mathfrak{g}$ 到自身的线性映射：
+\[
+\mathrm{Ad}_g = (dC_g)_e : \mathfrak{g} \to \mathfrak{g}.
+\]
+
+对 $Y \in \mathfrak{g}$，曲线 $t \mapsto C_g(\exp(tY))$ 是初速度为 $\mathrm{Ad}_g Y$ 的一参数子群，于是由命题 6，
+\[
+g \exp(tY) g^{-1} = \exp\bigl(t\, \mathrm{Ad}_g Y\bigr).
+\]
+
+由 $C_{gh} = C_g \circ C_h$ 与链式法则得 $\mathrm{Ad}_{gh} = \mathrm{Ad}_g \mathrm{Ad}_h$。因此群线性地作用在它自己的李代数上。对矩阵群，$C_g$ 是线性映射 $A \mapsto gAg^{-1}$ 的限制，所以
+\[
+\mathrm{Ad}_g Y = g Y g^{-1}.
+\]
+
+用这种语言，群交换子写成 $\exp(t\,\mathrm{Ad}_{\exp(sX)} Y)\, \exp(-tY)$，它对 $t$ 在 $t = 0$ 处的导数为
+\[
+\mathrm{Ad}_{\exp(sX)} Y - Y.
+\]
+
+再对 $s$ 求一次导，定义
+\[
+\mathrm{ad}_X Y = \frac{d}{ds}\Big|_{s=0} \mathrm{Ad}_{\exp(sX)} Y,
+\]
+
+对矩阵群则有
+\[
+\mathrm{ad}_X Y = \frac{d}{ds}\Big|_{s=0} e^{sX} Y e^{-sX} = XY - YX = [X, Y].
+\]
+
+于是，出现在 $e^{sX}e^{sY}$ 指数中的那个括号，正是共轭作用的导数。
+
+还有几个问题没有回答。对任意李群，$\mathrm{ad}_X Y$ 是否与第一篇通过左不变向量场定义的括号 $[X, Y]$ 一致？$\mathrm{Ad}$ 与 $\mathrm{ad}$ 和指数映射之间有什么关系，例如是否有 $\mathrm{Ad}_{\exp X} = e^{\mathrm{ad}_X}$？同态
+\[
+\mathrm{Ad} : G \to \mathrm{GL}(\mathfrak{g})
+\]
+
+又知道哪些 $\mathfrak{g}$ 本身所不知道的关于 $G$ 的信息？这些问题留待第三篇《伴随表示》。
+
+\end{CJK*}
+\end{document}

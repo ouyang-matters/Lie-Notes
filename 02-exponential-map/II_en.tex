@@ -1,0 +1,664 @@
+\documentclass[11pt]{article}
+
+\usepackage{math_article}
+\usepackage{series_lie}
+
+\renewcommand{\ArticleNumeral}{II}
+\renewcommand{\ArticleTitle}{The Exponential Map}
+\renewcommand{\ArticleAuthor}{Anqiao Ouyang \textperiodcentered\ F.\ M.}
+\renewcommand{\ArticleDate}{September 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+In Part I, we started from a Lie group $G$, passed to the tangent space at the identity, extended each tangent vector to a left-invariant vector field, and obtained the Lie algebra
+\[
+\mathfrak{g} = \mathrm{Lie}(G) = T_eG.
+\]
+
+This article travels back. Given an infinitesimal direction
+\[
+X \in \mathfrak{g},
+\]
+how does it generate actual motion inside $G$?
+
+In Part I we asserted: for every $X \in T_eG$ there is a unique one-parameter subgroup $\gamma_X$ with $\gamma_X'(0) = X$, and $\exp(X) = \gamma_X(1)$. The assertion was not proved there. Here we prove it and then see what follows from it. The route is
+\[
+X \in \mathfrak{g}
+\;\longrightarrow\;
+\widetilde{X}
+\;\longrightarrow\;
+\text{integral curve through } e
+\;\longrightarrow\;
+\gamma_X : \mathbb{R} \to G
+\;\longrightarrow\;
+\exp(X) = \gamma_X(1).
+\]
+
+The exponential map is therefore defined intrinsically, by solving a differential equation on $G$. The matrix power series
+\[
+e^X = \sum_{k=0}^{\infty} \frac{X^k}{k!}
+\]
+appears only later, as the solution of that equation when $G$ is a group of matrices.
+
+The last part of the article asks whether $\exp(X + Y) = \exp(X)\exp(Y)$. It does not, in general, and the first correction term turns out to be the Lie bracket. That observation leads directly to the adjoint representation, the subject of Part III.
+
+\section{Left-Invariant Vector Fields}
+
+Recall from Part I that a vector field $V$ on $G$ is \textbf{left-invariant} if
+\[
+(dL_g)_h V_h = V_{gh}
+\]
+for all $g, h \in G$, where $L_g(h) = gh$. For $X \in T_eG$, Part I defined
+\[
+\widetilde{X}_g = (dL_g)_e X.
+\]
+
+We write $\mathfrak{X}^L(G)$ for the set of left-invariant smooth vector fields on $G$. It is a real vector space.
+
+\textbf{Proposition 1.} For every $X \in T_eG$, the vector field $\widetilde{X}$ is smooth and left-invariant. The map
+\[
+T_eG \longrightarrow \mathfrak{X}^L(G), \qquad X \longmapsto \widetilde{X}
+\]
+is a linear isomorphism, with inverse $V \mapsto V_e$.
+
+\emph{Proof.} Left invariance follows from the chain rule and $L_g \circ L_h = L_{gh}$:
+\[
+(dL_g)_h \widetilde{X}_h = (dL_g)_h (dL_h)_e X = d(L_g \circ L_h)_e X = (dL_{gh})_e X = \widetilde{X}_{gh}.
+\]
+
+For smoothness, write $L_g = m \circ i_g$, where $i_g(h) = (g, h)$. Then $(di_g)_e X = (0_g, X)$, so
+\[
+\widetilde{X}_g = dm_{(g, e)}(0_g, X).
+\]
+
+The map $g \mapsto (0_g, X) \in T(G \times G)$ is smooth, and $dm$ is smooth because $m$ is. Hence $\widetilde{X}$ is smooth.
+
+Linearity of $X \mapsto \widetilde{X}$ is clear, and $\widetilde{X}_e = X$. Conversely, if $V$ is left-invariant, taking $h = e$ in the definition gives
+\[
+V_g = (dL_g)_e V_e = \widetilde{(V_e)}_g,
+\]
+so $V$ is recovered from $V_e$. $\square$
+
+Thus, as a vector space,
+\[
+\mathfrak{g} \cong \mathfrak{X}^L(G),
+\]
+and Part I used this identification to transport the bracket of vector fields to $T_eG$. In this article the identification is used differently: a vector field can be \emph{integrated}, and a single vector at $e$ cannot. Whatever motion $X$ generates must come from integrating $\widetilde{X}$.
+
+\section{One-Parameter Subgroups}
+
+\subsection{Integral curves}
+
+\textbf{Definition 2.} Let $V$ be a smooth vector field on a manifold $M$ and $J \subseteq \mathbb{R}$ an open interval. A smooth curve $\gamma : J \to M$ is an \textbf{integral curve} of $V$ if
+\[
+\gamma'(t) = V_{\gamma(t)}
+\]
+for all $t \in J$.
+
+In local coordinates this is a first-order autonomous system of ordinary differential equations. We shall use three standard facts, which follow from the existence and uniqueness theorem for such systems together with smooth dependence on initial conditions:
+
+\begin{enumerate}
+  \item For every $p \in M$ there is a \textbf{maximal} integral curve $\gamma_p : J_p \to M$ with $\gamma_p(0) = p$, where $J_p$ is an open interval containing $0$. Every integral curve starting at $p$ at time $0$ is a restriction of $\gamma_p$.
+  \item Two integral curves defined on the same open interval that agree at one time agree on the whole interval.
+  \item The \textbf{flow} $\theta(t, p) = \gamma_p(t)$ is defined on an open subset of $\mathbb{R} \times M$ and is smooth there.
+\end{enumerate}
+
+$V$ is called \textbf{complete} if $J_p = \mathbb{R}$ for every $p$.
+
+If $\gamma$ is an integral curve, then so is every time translate $t \mapsto \gamma(t + s)$, since the equation $\gamma'(t) = V_{\gamma(t)}$ does not involve $t$ explicitly. Left-invariant vector fields have one more symmetry.
+
+\textbf{Lemma 3.} Let $X \in \mathfrak{g}$, let $\gamma : J \to G$ be an integral curve of $\widetilde{X}$, and let $g \in G$. Then $L_g \circ \gamma$ is also an integral curve of $\widetilde{X}$.
+
+\emph{Proof.} By the chain rule and left invariance,
+\[
+(L_g \circ \gamma)'(t) = (dL_g)_{\gamma(t)} \gamma'(t) = (dL_g)_{\gamma(t)} \widetilde{X}_{\gamma(t)} = \widetilde{X}_{g\gamma(t)}. \qquad \square
+\]
+
+So the integral curve through $g$ is the integral curve through $e$, translated by $g$. Everything about $\widetilde{X}$ is visible near the identity.
+
+\subsection{Completeness}
+
+For a general vector field, integral curves can escape to infinity in finite time; $\partial/\partial x$ on the open interval $(0, 1)$ is an example. Left-invariant vector fields cannot do this.
+
+\textbf{Proposition 4.} Every left-invariant vector field on a Lie group is complete.
+
+\emph{Proof.} Let $X \in \mathfrak{g}$. By fact 1 there is some $\varepsilon > 0$ such that the integral curve $\gamma_e$ of $\widetilde{X}$ through $e$ is defined on $(-\varepsilon, \varepsilon)$. By Lemma 3, for every $g \in G$ the curve $t \mapsto g\gamma_e(t)$ is an integral curve through $g$ defined on the same interval. The point is that $\varepsilon$ does not depend on $g$.
+
+Let $\gamma : (a, b) \to G$ be a maximal integral curve, and suppose $b < \infty$. Choose
+\[
+s \in (a, b), \qquad s > b - \varepsilon,
+\]
+and define $\delta : (a, s + \varepsilon) \to G$ by
+\[
+\delta(t) =
+\begin{cases}
+\gamma(t), & t \in (a, b), \\
+\gamma(s)\, \gamma_e(t - s), & t \in (s - \varepsilon, s + \varepsilon).
+\end{cases}
+\]
+
+Both expressions are integral curves (the second by Lemma 3 and time translation), and both equal $\gamma(s)$ at $t = s$. By fact 2 they agree on the overlap $(a, b) \cap (s - \varepsilon, s + \varepsilon)$, which is an open interval containing $s$. So $\delta$ is a well-defined integral curve on $(a, s + \varepsilon)$, and $s + \varepsilon > b$. This contradicts the maximality of $\gamma$. Hence $b = \infty$; the same argument gives $a = -\infty$. $\square$
+
+\subsection{One-parameter subgroups}
+
+For $X \in \mathfrak{g}$, let
+\[
+\gamma_X : \mathbb{R} \to G
+\]
+denote the maximal integral curve of $\widetilde{X}$ with $\gamma_X(0) = e$. By Proposition 4 it is defined on all of $\mathbb{R}$.
+
+Recall (Definition 11 of Part I) that a one-parameter subgroup of $G$ is a smooth group homomorphism $(\mathbb{R}, +) \to G$.
+
+\textbf{Theorem 5.} For every $X \in \mathfrak{g}$ and all $s, t \in \mathbb{R}$,
+\[
+\boxed{\gamma_X(s + t) = \gamma_X(s)\, \gamma_X(t).}
+\]
+
+Hence $\gamma_X$ is a one-parameter subgroup of $G$, and $\gamma_X'(0) = X$.
+
+\emph{Proof.} Fix $s \in \mathbb{R}$ and consider the two curves
+\[
+\alpha(t) = \gamma_X(s + t), \qquad \beta(t) = \gamma_X(s)\, \gamma_X(t), \qquad t \in \mathbb{R}.
+\]
+$\alpha$ is a time translate of $\gamma_X$, and $\beta = L_{\gamma_X(s)} \circ \gamma_X$; both are integral curves of $\widetilde{X}$ on $\mathbb{R}$, by the remark before Lemma 3 and by Lemma 3 itself. At $t = 0$,
+\[
+\alpha(0) = \gamma_X(s) = \gamma_X(s)\, e = \beta(0).
+\]
+
+By fact 2, $\alpha = \beta$. Finally, $\gamma_X$ is smooth because integral curves are, and $\gamma_X'(0) = \widetilde{X}_e = X$. $\square$
+
+Read in words: flowing along $\widetilde{X}$ for time $s + t$ is the same as flowing for time $s$, and then flowing for time $t$ from the new starting point $\gamma_X(s)$. Because $\widetilde{X}$ is left-invariant, "flowing from $\gamma_X(s)$" is the same as flowing from $e$ and then multiplying on the left by $\gamma_X(s)$. The homomorphism property is nothing but this.
+
+The converse holds as well: a one-parameter subgroup is determined by its initial velocity.
+
+\textbf{Proposition 6.} Let $\gamma : \mathbb{R} \to G$ be a one-parameter subgroup and set $X = \gamma'(0)$. Then $\gamma$ is an integral curve of $\widetilde{X}$, and therefore
+\[
+\gamma = \gamma_X.
+\]
+
+\emph{Proof.} For fixed $s$, the homomorphism property gives $\gamma(s + t) = L_{\gamma(s)}(\gamma(t))$. Differentiating in $t$ at $t = 0$,
+\[
+\gamma'(s) = (dL_{\gamma(s)})_e\, \gamma'(0) = \widetilde{X}_{\gamma(s)}.
+\]
+
+So $\gamma$ is an integral curve of $\widetilde{X}$ on $\mathbb{R}$ with $\gamma(0) = e$, and fact 2 gives $\gamma = \gamma_X$. $\square$
+
+Theorem 5 supplies existence and Proposition 6 uniqueness. Together they prove the statement Part I took for granted:
+\[
+\boxed{
+\mathfrak{g}
+\;\longleftrightarrow\;
+\{\text{one-parameter subgroups of } G\},
+\qquad
+X \longmapsto \gamma_X, \qquad \gamma \longmapsto \gamma'(0).
+}
+\]
+
+Every direction at the identity generates exactly one one-parameter subgroup, and every one-parameter subgroup arises this way.
+
+\section{The Exponential Map}
+
+\textbf{Definition 7.} The \textbf{exponential map} of $G$ is
+\[
+\exp : \mathfrak{g} \to G, \qquad \exp(X) = \gamma_X(1).
+\]
+
+The definition uses only time $1$. The rest of the curve is recovered by rescaling.
+
+\textbf{Proposition 8.} For $X \in \mathfrak{g}$ and $c, t \in \mathbb{R}$,
+\[
+\gamma_{cX}(t) = \gamma_X(ct).
+\]
+
+Consequently
+\[
+\boxed{\exp(tX) = \gamma_X(t)},
+\]
+and for all $s, t \in \mathbb{R}$ and $n \in \mathbb{Z}$,
+\[
+\begin{gathered}
+\exp\bigl((s + t)X\bigr) = \exp(sX) \exp(tX), \qquad \exp(0) = e, \\
+\exp(-X) = \exp(X)^{-1}, \qquad \exp(nX) = \exp(X)^n.
+\end{gathered}
+\]
+
+\emph{Proof.} The curve $t \mapsto \gamma_X(ct)$ is the composition of the homomorphism $t \mapsto ct$ of $\mathbb{R}$ with $\gamma_X$, hence a one-parameter subgroup, and its velocity at $0$ is $cX$. By Proposition 6 it equals $\gamma_{cX}$. Taking $c = t$ and evaluating at time $1$,
+\[
+\exp(tX) = \gamma_{tX}(1) = \gamma_X(t).
+\]
+
+The remaining identities are Theorem 5 rewritten: $\exp(0) = \gamma_X(0) = e$; taking $s = 1$, $t = -1$ gives $\exp(X)\exp(-X) = e$; and $\exp(nX) = \exp(X)^n$ follows by induction on $|n|$. $\square$
+
+All four identities concern multiples of a single $X$. The set $\{\exp(tX) : t \in \mathbb{R}\}$ is the image of the abelian group $\mathbb{R}$ under a homomorphism, so it is an abelian subgroup of $G$, whatever $G$ is. Nothing proved so far says anything about $\exp(X)\exp(Y)$ for two different directions $X$ and $Y$; that question is taken up in the last two sections.
+
+Before studying $\exp$ near $0$ we need it to be smooth.
+
+\textbf{Proposition 9.} $\exp : \mathfrak{g} \to G$ is smooth.
+
+\emph{Proof.} On the manifold $G \times \mathfrak{g}$ consider the vector field
+\[
+V_{(g, X)} = (\widetilde{X}_g, 0) \in T_gG \oplus T_X\mathfrak{g}.
+\]
+
+By the formula $\widetilde{X}_g = dm_{(g, e)}(0_g, X)$ from the proof of Proposition 1, $\widetilde{X}_g$ depends smoothly on the pair $(g, X)$, so $V$ is smooth. The curve $t \mapsto (\gamma_X(t), X)$ is an integral curve of $V$ through $(e, X)$ defined on all of $\mathbb{R}$. Hence the domain of the flow $\Theta$ of $V$ contains $(1, (e, X))$ for every $X$, and
+\[
+\exp(X) = \mathrm{pr}_G\, \Theta\bigl(1, (e, X)\bigr).
+\]
+
+By fact 3, $\Theta$ is smooth on its domain, so $\exp$ is smooth. $\square$
+
+\section{Local Behaviour of the Exponential Map}
+
+Since $\mathfrak{g}$ is a vector space, its tangent space at $0$ is canonically identified with $\mathfrak{g}$ itself: $X \in \mathfrak{g}$ corresponds to the velocity at $t = 0$ of the line $t \mapsto tX$. With this identification the differential of $\exp$ at the origin is a linear map
+\[
+(d\exp)_0 : \mathfrak{g} \to T_eG = \mathfrak{g}.
+\]
+
+\textbf{Proposition 10.}
+\[
+\boxed{(d\exp)_0 = \mathrm{id}_{\mathfrak{g}}.}
+\]
+
+\emph{Proof.} For $X \in \mathfrak{g}$,
+\[
+(d\exp)_0 X = \frac{d}{dt}\Big|_{t=0} \exp(tX) = \gamma_X'(0) = X,
+\]
+by Proposition 8 and Theorem 5. $\square$
+
+\textbf{Corollary 11.} There are an open neighbourhood $U$ of $0 \in \mathfrak{g}$ and an open neighbourhood $V$ of $e \in G$ such that
+\[
+\exp|_U : U \to V
+\]
+is a diffeomorphism.
+
+\emph{Proof.} $\dim \mathfrak{g} = \dim G$ and $(d\exp)_0$ is invertible; apply the inverse function theorem. $\square$
+
+We write
+\[
+\log : V \to U
+\]
+for the inverse. Shrinking $U$ and $V$ if necessary, we may take $U$ to be a ball about $0$ for some norm on $\mathfrak{g}$, so that $tX \in U$ whenever $X \in U$ and $|t| \le 1$.
+
+Geometrically, choose a basis $E_1, \dots, E_n$ of $\mathfrak{g}$. The map
+\[
+(x^1, \dots, x^n) \longmapsto \exp\Bigl(\sum_{i=1}^n x^i E_i\Bigr)
+\]
+restricted to the corresponding coordinate ball parametrizes a neighbourhood of $e$, and its inverse is a chart, the \textbf{exponential coordinates} at $e$. Composing with $L_g$ gives such a chart around any $g \in G$. In exponential coordinates the one-parameter subgroups are exactly the straight lines through the origin: $\exp(tX)$ has coordinates $t$ times those of $X$. This is the precise sense of Part I's statement that the Lie algebra describes $G$ near the identity. Every element of $V$ is $\exp(X)$ for exactly one $X \in U$.
+
+Corollary 11 is a statement about \emph{some} neighbourhoods $U$ and $V$. It says nothing about how large they can be taken, nor about the behaviour of $\exp$ outside $U$. Both limitations are real, as we shall see in the section after next, once matrices are available.
+
+\section{Matrix Exponentials}
+
+Let $\mathbb{F} = \mathbb{R}$ or $\mathbb{C}$. As in Part I, $\mathrm{GL}(n, \mathbb{F})$ is open in $M_n(\mathbb{F})$ (a real vector space of dimension $n^2$ or $2n^2$), so it is a Lie group with
+\[
+\mathfrak{gl}(n, \mathbb{F}) = T_I\,\mathrm{GL}(n, \mathbb{F}) = M_n(\mathbb{F}).
+\]
+
+\subsection{The differential equation}
+
+For $g \in \mathrm{GL}(n, \mathbb{F})$, the left translation $L_g(A) = gA$ is the restriction of a linear map of $M_n(\mathbb{F})$, so its differential is the same linear map. Hence
+\[
+\widetilde{X}_g = (dL_g)_I X = gX,
+\]
+and the one-parameter subgroup $\gamma = \gamma_X$ is the solution of
+\[
+\gamma'(t) = \gamma(t)\, X, \qquad \gamma(0) = I.
+\]
+
+The order in $\gamma(t)X$ comes from left translation. It must not be confused with the equation $\gamma' = X\gamma$, which describes the integral curves of the \emph{right}-invariant field $g \mapsto Xg$; see the remark below.
+
+\subsection{The power series}
+
+Fix a submultiplicative norm on $M_n(\mathbb{F})$, for instance the operator norm, so that $\|X^k\| \le \|X\|^k$. Then
+\[
+e^X = \sum_{k=0}^{\infty} \frac{X^k}{k!}
+\]
+converges absolutely for every $X$. For fixed $X$, $t \mapsto e^{tX} = \sum_k t^k X^k / k!$ is a power series in $t$ with infinite radius of convergence, so it may be differentiated term by term:
+\[
+\frac{d}{dt} e^{tX} = \sum_{k=1}^{\infty} \frac{t^{k-1} X^k}{(k-1)!} = X e^{tX} = e^{tX} X.
+\]
+
+Both forms hold because $X$ commutes with every partial sum. In particular
+\[
+\frac{d}{dt}\bigl(e^{tX} e^{-tX}\bigr) = e^{tX} X e^{-tX} - e^{tX} X e^{-tX} = 0,
+\]
+so $e^{tX} e^{-tX} = I$, and $e^{tX} \in \mathrm{GL}(n, \mathbb{F})$ for all $t$.
+
+\textbf{Proposition 12.} For every $X \in \mathfrak{gl}(n, \mathbb{F})$,
+\[
+\boxed{\exp(X) = e^X.}
+\]
+
+More generally, let $G \subseteq \mathrm{GL}(n, \mathbb{F})$ be a closed subgroup, with Lie algebra $\mathfrak{g} = T_IG \subseteq M_n(\mathbb{F})$. Then $e^{tX} \in G$ for all $X \in \mathfrak{g}$ and $t \in \mathbb{R}$, the exponential map of $G$ is $X \mapsto e^X$, and
+\[
+\mathfrak{g} = \{ X \in M_n(\mathbb{F}) : e^{tX} \in G \text{ for all } t \in \mathbb{R} \}.
+\]
+
+\emph{Proof.} The curve $t \mapsto e^{tX}$ lies in $\mathrm{GL}(n, \mathbb{F})$, equals $I$ at $t = 0$, and satisfies $\frac{d}{dt} e^{tX} = e^{tX} X = \widetilde{X}_{e^{tX}}$. It is therefore the integral curve $\gamma_X$, and $\exp(X) = \gamma_X(1) = e^X$.
+
+Now let $G$ be a closed subgroup. By the closed subgroup theorem (recalled in Part I), $G$ is an embedded Lie subgroup, and the inclusion $\iota : G \to \mathrm{GL}(n, \mathbb{F})$ is a smooth homomorphism whose differential at $I$ is the inclusion $\mathfrak{g} \subseteq M_n(\mathbb{F})$. For $X \in \mathfrak{g}$, let $\gamma^G_X$ be the one-parameter subgroup of $G$ generated by $X$. Then $\iota \circ \gamma^G_X$ is a one-parameter subgroup of $\mathrm{GL}(n, \mathbb{F})$ with initial velocity $X$, so by Proposition 6, applied in $\mathrm{GL}(n, \mathbb{F})$,
+\[
+\gamma^G_X(t) = e^{tX}.
+\]
+
+This gives $e^{tX} \in G$ and $\exp_G(X) = e^X$. Conversely, if $e^{tX} \in G$ for all $t$, then $t \mapsto e^{tX}$ is a smooth curve in the embedded submanifold $G$ through $I$, and its velocity $X$ lies in $T_IG = \mathfrak{g}$. $\square$
+
+Note the logical order. The exponential map was defined in Definition 7 without any series. For matrix groups the defining differential equation happens to be linear, and the series is its solution. In Part I the computation showing $e^X \in \mathrm{SO}(n)$ for $X \in \mathfrak{so}(n)$ was a direct check; Proposition 12 now explains why it had to succeed.
+
+\textbf{Remark.} Since $X$ commutes with $e^{tX}$, the curve $e^{tX}$ also satisfies $\gamma' = X\gamma$. The two vector fields $g \mapsto gX$ and $g \mapsto Xg$ nevertheless differ, and so do their flows: by Lemma 3, the integral curve of $\widetilde{X}$ through $g$ is
+\[
+t \longmapsto g\, e^{tX},
+\]
+whereas that of $g \mapsto Xg$ is $t \mapsto e^{tX} g$. Left-invariant vector fields generate right multiplications. Their integral curves through $I$ coincide, and this is why the one-parameter subgroup does not depend on the choice.
+
+\subsection{Example: GL(n, R)}
+
+For $n = 1$, $\mathrm{GL}(1, \mathbb{R}) = \mathbb{R}^\times$, $\mathfrak{gl}(1, \mathbb{R}) = \mathbb{R}$, and $\exp(x) = e^x$. The image is $(0, \infty)$, so $\exp$ misses the negative half-line.
+
+The same happens for every $n$. Since
+\[
+\det(e^X) = e^{\operatorname{tr} X} > 0
+\]
+for real $X$, as used in Part I, the image of $\exp : \mathfrak{gl}(n, \mathbb{R}) \to \mathrm{GL}(n, \mathbb{R})$ is contained in $\{ \det > 0 \}$.
+
+\subsection{Example: SO(2)}
+
+A skew-symmetric $2 \times 2$ matrix is a multiple of
+\[
+J = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix},
+\]
+so $\mathfrak{so}(2) = \mathbb{R}J$. Since $J^2 = -I$, we have $J^{2k} = (-1)^k I$ and $J^{2k+1} = (-1)^k J$. Splitting the series into even and odd terms,
+\[
+e^{tJ} = \sum_{k=0}^{\infty} \frac{(-1)^k t^{2k}}{(2k)!}\, I + \sum_{k=0}^{\infty} \frac{(-1)^k t^{2k+1}}{(2k+1)!}\, J = \cos t\, I + \sin t\, J,
+\]
+that is,
+\[
+\boxed{
+e^{tJ} = \begin{pmatrix} \cos t & -\sin t \\ \sin t & \cos t \end{pmatrix}.
+}
+\]
+
+The one-parameter subgroups of $\mathrm{SO}(2)$ are therefore $t \mapsto e^{taJ}$, rotation at constant angular velocity $a$.
+
+The meaning of the generator is visible on the plane. For $x \in \mathbb{R}^2$,
+\[
+\frac{d}{dt}\Big|_{t=0} e^{tJ} x = Jx = \begin{pmatrix} -x_2 \\ x_1 \end{pmatrix},
+\]
+the velocity field of a rigid rotation about the origin. $J$ records only this infinitesimal instruction: move each point perpendicular to its position vector, with speed equal to its distance from the origin. Integrating the instruction produces every rotation of the plane.
+
+The map $\exp : \mathfrak{so}(2) \to \mathrm{SO}(2)$ is surjective, since every rotation has an angle. It is not injective, since the angle is determined only modulo $2\pi$:
+\[
+e^{2\pi J} = I = e^{0}.
+\]
+
+\section{Local Does Not Mean Global}
+
+Corollary 11 gives a local inverse near $0$ and $e$. Neither injectivity nor surjectivity of $\exp$ on all of $\mathfrak{g}$ follows, and both can fail.
+
+\subsection{Failure of injectivity}
+
+Let
+\[
+S^1 = \{ z \in \mathbb{C} : |z| = 1 \},
+\]
+a closed subgroup of $\mathrm{GL}(1, \mathbb{C}) = \mathbb{C}^\times$. By Proposition 12, its Lie algebra consists of those $z \in \mathbb{C}$ with $|e^{tz}| = e^{t \operatorname{Re} z} = 1$ for all $t$, that is,
+\[
+\mathrm{Lie}(S^1) = i\mathbb{R}.
+\]
+
+Identifying $i\mathbb{R}$ with $\mathbb{R}$ via $i\theta \leftrightarrow \theta$, the exponential map becomes
+\[
+\exp : \mathbb{R} \to S^1, \qquad \theta \longmapsto e^{i\theta},
+\]
+and
+\[
+\exp(\theta + 2\pi k) = \exp(\theta), \qquad k \in \mathbb{Z}.
+\]
+
+Here $\exp$ is as well behaved as one could ask. It is a surjective group homomorphism, and its differential is invertible at every point, so it is a local diffeomorphism everywhere, not only at $0$. It is still not injective; its kernel is $2\pi\mathbb{Z}$. The inverse function theorem produces a local inverse on some neighbourhood of $0$. In this case $(-\pi, \pi) \to S^1 \setminus \{-1\}$ is a diffeomorphism, while no open interval of length greater than $2\pi$ maps injectively. Under the isomorphism $e^{i\theta} \leftrightarrow e^{\theta J}$ this is the same phenomenon as in $\mathrm{SO}(2)$.
+
+\subsection{Failure of surjectivity}
+
+There is an obvious obstruction. Let $G_0$ denote the identity component of $G$.
+
+\textbf{Proposition 13.} $\exp(\mathfrak{g}) \subseteq G_0$. Moreover, $\exp(\mathfrak{g})$ generates $G_0$: every element of $G_0$ is a finite product
+\[
+\exp(X_1) \exp(X_2) \cdots \exp(X_k), \qquad X_1, \dots, X_k \in \mathfrak{g}.
+\]
+
+\emph{Proof.} The path $t \mapsto \exp(tX)$, $t \in [0, 1]$, joins $e$ to $\exp(X)$, so $\exp(X) \in G_0$.
+
+Let $H$ be the set of finite products of exponentials. Since $\exp(X)^{-1} = \exp(-X)$, $H$ is a subgroup. If $\alpha, \beta$ are paths from $e$ to $a$ and to $b$, then $t \mapsto \alpha(t)\beta(t)$ is a path from $e$ to $ab$; hence $H \subseteq G_0$. By Corollary 11, $H$ contains the open neighbourhood $V$ of $e$, so for each $h \in H$ the open set $hV$ is a neighbourhood of $h$ inside $H$. Thus $H$ is open. Its complement is the union of the cosets $gH$ with $g \notin H$, each of which is open, so $H$ is also closed. Being open, closed and nonempty, $H$ contains the connected component $G_0$ of $e$. Hence $H = G_0$. $\square$
+
+So for $\mathrm{O}(n)$ the matrices of determinant $-1$ are not exponentials, and for $\mathrm{GL}(n, \mathbb{R})$ neither are those with $\det < 0$; this is the phenomenon of the previous section. Connectedness, however, does not guarantee surjectivity.
+
+\textbf{Proposition 14.} The matrix
+\[
+A = \begin{pmatrix} -1 & 1 \\ 0 & -1 \end{pmatrix} \in \mathrm{SL}(2, \mathbb{R})
+\]
+is not of the form $e^X$ with $X \in \mathfrak{sl}(2, \mathbb{R})$, although $\mathrm{SL}(2, \mathbb{R})$ is connected.
+
+\emph{Proof.} Let $X \in \mathfrak{sl}(2, \mathbb{R})$ and $\delta = \det X$. Since $\operatorname{tr} X = 0$, the Cayley–Hamilton theorem gives
+\[
+X^2 = -\delta I.
+\]
+
+Splitting the exponential series into even and odd powers, as for $\mathrm{SO}(2)$:
+
+\begin{itemize}
+  \item If $\delta < 0$, put $\mu = \sqrt{-\delta}$. Then $e^X = \cosh\mu\, I + \dfrac{\sinh \mu}{\mu} X$, and $\operatorname{tr} e^X = 2\cosh \mu > 2$.
+  \item If $\delta = 0$, then $X^2 = 0$, $e^X = I + X$, and $\operatorname{tr} e^X = 2$.
+  \item If $\delta > 0$, put $\nu = \sqrt{\delta}$. Then $e^X = \cos\nu\, I + \dfrac{\sin \nu}{\nu} X$, and $\operatorname{tr} e^X = 2\cos \nu \ge -2$.
+\end{itemize}
+
+In every case $\operatorname{tr} e^X \ge -2$, with equality only if $\delta > 0$ and $\cos \nu = -1$. In that case $\sin \nu = 0$ and $e^X = -I$. But $\operatorname{tr} A = -2$ and $A \ne -I$, so $A \ne e^X$.
+
+For connectedness: by the polar decomposition, every $A \in \mathrm{SL}(2, \mathbb{R})$ can be written uniquely as $A = RP$ with $R \in \mathrm{SO}(2)$ and $P$ symmetric positive definite of determinant $1$, and this gives a homeomorphism from $\mathrm{SL}(2, \mathbb{R})$ onto $\mathrm{SO}(2) \times P_1$, where $P_1$ is the set of such $P$. Both factors are connected: $\mathrm{SO}(2)$ is a circle, and $P_1$ is the image of the vector space of traceless symmetric matrices under $S \mapsto e^S$. $\square$
+
+Proposition 13 still applies. With
+\[
+N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \in \mathfrak{sl}(2, \mathbb{R}),
+\]
+we have $e^{\pi J} = -I$ and $e^{-N} = I - N$, so
+\[
+A = e^{\pi J}\, e^{-N}.
+\]
+$A$ is a product of two exponentials but not a single one. The product of two exponentials is not, in general, another exponential, and the question of how $\exp(X)\exp(Y)$ relates to $\exp$ of anything is exactly where the next two sections begin.
+
+Whether $\exp$ is surjective depends on the group. For compact connected Lie groups it is. That is a standard theorem, but its proof needs maximal tori and lies outside this series for now. The global distinction between $\mathrm{SU}(2)$ and $\mathrm{SO}(3)$ mentioned in Part I is likewise left to a separate article.
+
+\section{When Exponentials Commute}
+
+For real numbers $e^{x+y} = e^x e^y$. For exponentials along a single direction, Proposition 8 gives $\exp(sX)\exp(tX) = \exp((s + t)X)$. The natural question is whether
+\[
+\exp(X + Y) \stackrel{?}{=} \exp(X) \exp(Y)
+\]
+for arbitrary $X, Y \in \mathfrak{g}$.
+
+\textbf{Proposition 15.} If $X, Y \in M_n(\mathbb{F})$ satisfy $XY = YX$, then
+\[
+e^{X + Y} = e^X e^Y.
+\]
+
+\emph{Proof.} Because $X$ and $Y$ commute, the binomial theorem holds:
+\[
+(X + Y)^m = \sum_{k=0}^{m} \binom{m}{k} X^k Y^{m-k}.
+\]
+
+The series for $e^X$ and $e^Y$ converge absolutely, so their product may be expanded and regrouped by total degree:
+\[
+e^X e^Y = \sum_{j, k \ge 0} \frac{X^j Y^k}{j!\, k!} = \sum_{m=0}^{\infty} \frac{1}{m!} \sum_{k=0}^{m} \binom{m}{k} X^k Y^{m-k} = \sum_{m=0}^{\infty} \frac{(X + Y)^m}{m!} = e^{X+Y}. \qquad \square
+\]
+
+Commutativity entered only through the binomial theorem. Without it, already in degree $2$,
+\[
+\frac{(X + Y)^2}{2} = \frac{X^2 + XY + YX + Y^2}{2},
+\]
+while the degree-$2$ part of $e^X e^Y$ is $\frac{X^2}{2} + XY + \frac{Y^2}{2}$. The two differ by $\frac12(XY - YX)$.
+
+For a general Lie group there is no power series, but the same statement holds, and the reason is geometric. By Lemma 3 and Proposition 8, the integral curve of $\widetilde{X}$ through $g$ is $t \mapsto g\exp(tX)$, so the flow of $\widetilde{X}$ is
+\[
+\theta^X_t(g) = g \exp(tX),
+\]
+right multiplication by $\exp(tX)$. We also use the standard fact that makes precise Part I's remark about the Lie bracket and flows: two complete vector fields have vanishing bracket if and only if their flows commute.
+
+\textbf{Proposition 16.} Let $G$ be any Lie group and $X, Y \in \mathfrak{g}$ with $[X, Y] = 0$. Then $\exp(sX)$ and $\exp(tY)$ commute for all $s, t \in \mathbb{R}$, and
+\[
+\exp(X + Y) = \exp(X) \exp(Y).
+\]
+
+\emph{Proof.} By Part I, $[\widetilde{X}, \widetilde{Y}]$ is left-invariant, and its value at $e$ is $[X, Y] = 0$. By Proposition 1 it vanishes identically, so the flows $\theta^X_s$ and $\theta^Y_t$ commute. Evaluating at $e$,
+\[
+\exp(tY)\exp(sX) = \theta^X_s\bigl(\theta^Y_t(e)\bigr) = \theta^Y_t\bigl(\theta^X_s(e)\bigr) = \exp(sX)\exp(tY).
+\]
+
+Now let $\sigma(t) = \exp(tX)\exp(tY)$. Using this commutativity in the middle step,
+\[
+\sigma(s + t) = \exp(sX)\exp(tX)\exp(sY)\exp(tY) = \exp(sX)\exp(sY)\exp(tX)\exp(tY) = \sigma(s)\sigma(t),
+\]
+so $\sigma$ is a one-parameter subgroup. Since $m(g, e) = g$ and $m(e, h) = h$, we have $dm_{(e,e)}(u, v) = u + v$, and hence $\sigma'(0) = X + Y$. By Proposition 6, $\sigma(t) = \exp(t(X + Y))$; take $t = 1$. $\square$
+
+For $G = \mathrm{GL}(n, \mathbb{F})$ the bracket is the commutator $XY - YX$ (Part I), and Proposition 16 recovers Proposition 15. Both proofs say the same thing in different languages: when the infinitesimal motions commute, so do the finite ones, and moving along $X$ and then along $Y$ is the same as moving along $X + Y$.
+
+\textbf{Remark.} The condition $[X, Y] = 0$ is sufficient, not necessary. In $\mathrm{GL}(2, \mathbb{C})$ take
+\[
+X = \begin{pmatrix} 0 & 0 \\ 0 & 2\pi i \end{pmatrix}, \qquad Y = \begin{pmatrix} 0 & 1 \\ 0 & 2\pi i \end{pmatrix}.
+\]
+
+Then $[X, Y] = \begin{pmatrix} 0 & 2\pi i \\ 0 & 0 \end{pmatrix} \ne 0$. However, $e^X = I$ because $X$ is diagonal, while $Y$ and $X + Y = \begin{pmatrix} 0 & 1 \\ 0 & 4\pi i \end{pmatrix}$ each have two distinct eigenvalues lying in $2\pi i \mathbb{Z}$, so they are diagonalizable with exponential $I$. Therefore
+\[
+e^{X+Y} = I = e^X e^Y.
+\]
+
+What does characterize commuting directions is the identity for \emph{all small multiples}; see the next section.
+
+\section{The First Trace of BCH}
+
+\subsection{A small example}
+
+In $\mathfrak{sl}(2, \mathbb{R})$ take
+\[
+X = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \qquad Y = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}.
+\]
+
+Since $X^2 = Y^2 = 0$,
+\[
+e^X e^Y = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix},
+\qquad
+e^Y e^X = \begin{pmatrix} 1 & 1 \\ 1 & 2 \end{pmatrix}.
+\]
+
+On the other hand, $(X + Y)^2 = I$, so
+\[
+e^{X+Y} = \cosh 1\, I + \sinh 1\, (X + Y) = \begin{pmatrix} \cosh 1 & \sinh 1 \\ \sinh 1 & \cosh 1 \end{pmatrix}.
+\]
+
+All three matrices are different. The obstruction is
+\[
+[X, Y] = XY - YX = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.
+\]
+
+\subsection{Second order}
+
+To see where the bracket enters, replace $X, Y \in M_n(\mathbb{F})$ by $sX, sY$ and expand in $s$. Here $O(s^3)$ denotes a matrix-valued function bounded in norm by $C|s|^3$ for small $|s|$. Then
+\[
+\begin{aligned}
+e^{sX} e^{sY} &= I + s(X + Y) + s^2\Bigl(\tfrac12 X^2 + XY + \tfrac12 Y^2\Bigr) + O(s^3), \\
+e^{s(X+Y)} &= I + s(X + Y) + \tfrac12 s^2 \bigl(X^2 + XY + YX + Y^2\bigr) + O(s^3),
+\end{aligned}
+\]
+and so
+\[
+e^{sX} e^{sY} - e^{s(X+Y)} = \frac{s^2}{2}[X, Y] + O(s^3).
+\]
+
+The two sides agree to first order in $s$, as they must, since both are curves through $I$ with velocity $X + Y$. They first differ at second order, and the difference is exactly half the commutator. Adding this correction to the exponent repairs the discrepancy. Expanding $e^Z$ with $Z = s(X + Y) + \frac{s^2}{2}[X, Y]$ gives
+\[
+e^{s(X+Y) + \frac{s^2}{2}[X, Y]} = I + s(X+Y) + s^2\Bigl(\tfrac12 X^2 + XY + \tfrac12 Y^2\Bigr) + O(s^3),
+\]
+which matches $e^{sX}e^{sY}$ to second order. Applying $\log$ from Corollary 11, which is smooth and hence Lipschitz near $I$,
+\[
+\log\bigl(e^{sX} e^{sY}\bigr) = s(X + Y) + \frac{s^2}{2}[X, Y] + O(s^3).
+\]
+
+In particular, if $e^{sX}e^{sY} = e^{s(X+Y)}$ for all $s$ in some interval around $0$, then $[X, Y] = 0$. Together with Proposition 15, the identity for all small multiples is \emph{equivalent} to $[X, Y] = 0$, in contrast to the single identity at $s = 1$.
+
+The same computation, applied to the \textbf{group commutator}, isolates the bracket completely:
+\[
+e^{sX} e^{tY} e^{-sX} e^{-tY} = I + st\,[X, Y] + O\bigl((|s| + |t|)^3\bigr).
+\]
+
+To check this, expand each factor to second order. The first-order terms $sX + tY - sX - tY$ cancel. At second order, the squares $s^2X^2$ and $t^2Y^2$ cancel as well, and only $st(XY - YX)$ survives. The group commutator $ghg^{-1}h^{-1}$ is the multiplicative measure of whether $g$ and $h$ commute, and its leading term is the Lie bracket.
+
+\subsection{The Baker–Campbell–Hausdorff formula}
+
+The second-order computation is the beginning of a general statement. Let $G$ be any Lie group, with $U$, $V$ and $\log$ as in Corollary 11. For $X, Y$ sufficiently close to $0$, the product $\exp(X)\exp(Y)$ lies in $V$, and the \textbf{Baker–Campbell–Hausdorff formula} asserts that
+\[
+\boxed{
+\log\bigl(\exp X \exp Y\bigr) = X + Y + \frac12 [X, Y] + \frac1{12}[X, [X, Y]] + \frac1{12}[Y, [Y, X]] + \cdots,
+}
+\]
+where the omitted terms are iterated brackets of $X$ and $Y$ of total degree at least $4$, with universal rational coefficients. The series converges when $X$ and $Y$ are small enough.
+
+What matters here is not the individual coefficients but the shape of the formula. After $X + Y$, every term is a bracket. The group multiplication near $e$, written in exponential coordinates, is therefore determined entirely by the vector space $\mathfrak{g}$ and its bracket. This is the precise content behind Part I's statement that the Lie algebra determines the local structure of a Lie group. The bracket is exactly the information about the multiplication that the linear structure of $\mathfrak{g}$ does not record.
+
+The sign of $\frac12[X, Y]$ depends on the convention of Part I, where the bracket on $\mathfrak{g}$ was defined through \emph{left}-invariant vector fields; for matrix groups this gives $[X, Y] = XY - YX$, consistent with the computation above. Right-invariant fields would induce the opposite bracket and reverse the signs of the even-degree terms.
+
+The proof of the formula, its convergence, and Dynkin's explicit expression for the general term belong to a separate supplementary article. For the main line, the second-order term is enough.
+
+\section{Toward the Adjoint Representation}
+
+Look again at the group commutator and group its first three factors:
+\[
+e^{sX} e^{tY} e^{-sX} e^{-tY} = \bigl(e^{sX} e^{tY} e^{-sX}\bigr)\, e^{-tY}.
+\]
+
+The bracketed factor is the one-parameter subgroup $t \mapsto e^{tY}$ conjugated by $g = e^{sX}$. So the bracket measures how conjugation by elements near the identity moves one-parameter subgroups.
+
+For any Lie group, define \textbf{conjugation} by $g \in G$:
+\[
+C_g : G \to G, \qquad C_g(h) = g h g^{-1}.
+\]
+
+Since $C_g = L_g \circ R_{g^{-1}}$, it is a diffeomorphism. It is also a group automorphism fixing $e$, so its differential at the identity is a linear map of $\mathfrak{g}$ to itself:
+\[
+\mathrm{Ad}_g = (dC_g)_e : \mathfrak{g} \to \mathfrak{g}.
+\]
+
+For $Y \in \mathfrak{g}$, the curve $t \mapsto C_g(\exp(tY))$ is a one-parameter subgroup with initial velocity $\mathrm{Ad}_g Y$, so Proposition 6 gives
+\[
+g \exp(tY) g^{-1} = \exp\bigl(t\, \mathrm{Ad}_g Y\bigr).
+\]
+
+Since $C_{gh} = C_g \circ C_h$, the chain rule gives $\mathrm{Ad}_{gh} = \mathrm{Ad}_g \mathrm{Ad}_h$. The group therefore acts linearly on its own Lie algebra. For a matrix group, $C_g$ is the restriction of the linear map $A \mapsto gAg^{-1}$, so
+\[
+\mathrm{Ad}_g Y = g Y g^{-1}.
+\]
+
+In this language the group commutator becomes $\exp(t\,\mathrm{Ad}_{\exp(sX)} Y)\, \exp(-tY)$, whose derivative in $t$ at $t = 0$ is
+\[
+\mathrm{Ad}_{\exp(sX)} Y - Y.
+\]
+
+Differentiating once more, now in $s$, defines
+\[
+\mathrm{ad}_X Y = \frac{d}{ds}\Big|_{s=0} \mathrm{Ad}_{\exp(sX)} Y,
+\]
+and for matrix groups
+\[
+\mathrm{ad}_X Y = \frac{d}{ds}\Big|_{s=0} e^{sX} Y e^{-sX} = XY - YX = [X, Y].
+\]
+
+The bracket that appeared in the exponent of $e^{sX}e^{sY}$ is thus the derivative of the conjugation action.
+
+Several questions are left open. For an arbitrary Lie group, does $\mathrm{ad}_X Y$ agree with the bracket $[X, Y]$ that Part I defined through left-invariant vector fields? How do $\mathrm{Ad}$ and $\mathrm{ad}$ interact with the exponential map, for instance whether $\mathrm{Ad}_{\exp X} = e^{\mathrm{ad}_X}$? And what does the homomorphism
+\[
+\mathrm{Ad} : G \to \mathrm{GL}(\mathfrak{g})
+\]
+know about $G$ that $\mathfrak{g}$ alone does not? These questions are left to Part III, \emph{The Adjoint Representation}.
+
+\end{document}
