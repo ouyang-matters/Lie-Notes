@@ -1,0 +1,1289 @@
+\documentclass[11pt]{article}
+
+\usepackage{math_article}
+\usepackage{series_lie}
+
+\renewcommand{\ArticleNumeral}{I}
+\renewcommand{\ArticleTitle}{Lie Groups and Lie Algebras}
+\renewcommand{\ArticleAuthor}{Anqiao Ouyang \textperiodcentered\ F.\ M.}
+\renewcommand{\ArticleDate}{December 2024}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+The central theme of Lie groups and Lie algebras can be summed up in a single phrase: \textbf{continuous symmetry}.
+
+Finite groups describe discrete symmetries. For instance, a fixed cube admits only finitely many rotations of space that carry it onto itself, and these rotations form a finite group. If, on the other hand, we no longer require the cube to land exactly back in its original position and instead study all possible rotations of three-dimensional space, then the angle of rotation can vary continuously, and these rotations form the Lie group
+\[
+\mathrm{SO}(3).
+\]
+
+From this point of view, a Lie group carries two structures at once. On the one hand, it is a group, so it can describe composition and inversion of symmetry transformations; on the other hand, it is a smooth manifold, so we can use calculus to study how these transformations vary continuously.
+
+A Lie algebra is the \textbf{infinitesimal version} of such a continuous symmetry. If a Lie group describes all continuous transformations of finite size, then its tangent space at the identity describes how these transformations behave at the infinitesimal scale. This tangent space, together with a naturally arising bracket operation, is the Lie algebra associated with the Lie group.
+
+Lie theory is therefore organized around a fundamental chain of ideas:
+\[
+\text{Lie group}
+\longrightarrow
+T_eG
+\longrightarrow
+\text{Lie algebra}
+\longrightarrow
+\text{local structure of }G.
+\]
+
+This article follows that route. We first introduce Lie groups and group actions, then discuss orbits, stabilizers and homogeneous spaces, and finally construct the Lie algebra from tangent spaces and vector fields and introduce the exponential map, which connects the Lie algebra back to the Lie group.
+
+The reader needs only basic linear algebra, group theory and the fundamentals of multivariable calculus. A reader not yet comfortable with smooth manifolds may think of one, for now, as a space that locally looks like Euclidean space and on which one can do differential calculus.
+
+
+\section{Continuous Symmetry and Lie Groups}
+
+\subsection{Starting from the rotation group}
+
+Consider three-dimensional Euclidean space $\mathbb{R}^3$.
+
+The linear transformations that preserve Euclidean length and the orientation of space can be written as
+\[
+\mathrm{SO}(3)
+=
+\left\{
+R\in M_3(\mathbb{R})
+:
+R^{\mathsf T}R=I,\;
+\det R=1
+\right\}.
+\]
+
+Here $M_3(\mathbb{R})$ denotes the space of all $3\times 3$ real matrices.
+
+If $R_1,R_2\in\mathrm{SO}(3)$, then
+\[
+R_1R_2\in\mathrm{SO}(3),
+\]
+and
+\[
+R^{-1}=R^{\mathsf T}\in\mathrm{SO}(3).
+\]
+
+Hence $\mathrm{SO}(3)$ is a group.
+
+But it is more than just a group. The entries of a matrix can vary continuously, and $\mathrm{SO}(3)$ itself can be given the structure of a three-dimensional smooth manifold. We can therefore ask not only how two rotations multiply, but also how a rotation changes over time, what tangent vectors to the rotation group look like, and what the local geometry of the rotation group is.
+
+An object carrying both a group structure and a smooth structure in this way is exactly a Lie group.
+
+Two notions that are easily confused should be kept apart. $\mathrm{SO}(3)$ consists of \textbf{all} orientation-preserving rotations of three-dimensional space, whereas a fixed cube has only finitely many rotational symmetries. Those rotations form a finite subgroup of $\mathrm{SO}(3)$, not the whole of $\mathrm{SO}(3)$.
+
+
+\subsection{Definition of a Lie group}
+
+\textbf{Definition 1.}
+A \textbf{Lie group} is a smooth manifold $G$ which is also a group, such that the group multiplication
+\[
+m:G\times G\to G,
+\qquad
+m(g,h)=gh
+\]
+and the inversion map
+\[
+\iota:G\to G,
+\qquad
+\iota(g)=g^{-1}
+\]
+are both smooth maps.
+
+In other words, a Lie group requires the algebraic structure and the differential structure to be compatible with each other.
+
+Here ``smooth manifold'' is by default understood to mean a finite-dimensional, Hausdorff, second-countable real smooth manifold. Infinite-dimensional Lie groups do exist, but their analysis is considerably more involved; in this article we consider only finite-dimensional real Lie groups.
+
+
+\subsection{Some basic examples}
+
+One of the simplest Lie groups is the additive group
+\[
+(\mathbb{R}^n,+).
+\]
+
+Its group operation is vector addition, and the underlying space is the smooth manifold $\mathbb{R}^n$ itself.
+
+Another important example is the general linear group
+\[
+\mathrm{GL}(n,\mathbb{R})
+=
+\{A\in M_n(\mathbb{R}):\det A\neq 0\}.
+\]
+
+Since the determinant is a continuous function,
+\[
+\mathrm{GL}(n,\mathbb{R})
+=
+\det^{-1}(\mathbb{R}\setminus\{0\})
+\]
+is an open subset of $M_n(\mathbb{R})\cong\mathbb{R}^{n^2}$, and is therefore naturally a smooth manifold of dimension $n^2$.
+
+Matrix multiplication and matrix inversion are both smooth on $\mathrm{GL}(n,\mathbb{R})$, so $\mathrm{GL}(n,\mathbb{R})$ is a Lie group.
+
+Similarly, we will frequently encounter
+\[
+\mathrm{SL}(n,\mathbb{R})
+=
+\{A\in\mathrm{GL}(n,\mathbb{R}):\det A=1\},
+\]
+the orthogonal group
+\[
+\mathrm{O}(n)
+=
+\{A\in\mathrm{GL}(n,\mathbb{R}):A^{\mathsf T}A=I\},
+\]
+and the special orthogonal group
+\[
+\mathrm{SO}(n)
+=
+\{A\in\mathrm{O}(n):\det A=1\}.
+\]
+
+These matrix Lie groups will serve as key examples later on, when we study Lie algebras and the exponential map.
+
+
+\section{Lie Group Actions}
+
+\subsection{Group actions}
+
+A group by itself is merely an abstract algebraic object. For a group to genuinely describe the symmetries of a space, we must also specify how its elements act on that space.
+
+Let $G$ be a group and $M$ a set.
+
+\textbf{Definition 2.}
+A map
+\[
+\theta:G\times M\to M
+\]
+is called a \textbf{left action} of $G$ on $M$ if for all
+\[
+g_1,g_2\in G,
+\qquad
+p\in M,
+\]
+we have
+\[
+\theta(g_1,\theta(g_2,p))
+=
+\theta(g_1g_2,p)
+\]
+and
+\[
+\theta(e,p)=p.
+\]
+
+One usually abbreviates this as
+\[
+g\cdot p=\theta(g,p).
+\]
+
+The two conditions for a group action then read
+\[
+g_1\cdot(g_2\cdot p)
+=
+(g_1g_2)\cdot p
+\]
+and
+\[
+e\cdot p=p.
+\]
+
+For fixed $g\in G$, define
+\[
+\theta_g:M\to M,
+\qquad
+\theta_g(p)=g\cdot p.
+\]
+
+Then
+\[
+\theta_{g_1}\circ\theta_{g_2}
+=
+\theta_{g_1g_2}.
+\]
+
+This shows that a group action amounts to interpreting abstract group elements as transformations of $M$.
+
+
+\subsection{Smooth actions}
+
+If $G$ is a Lie group and $M$ is a smooth manifold, we naturally want the action to be compatible with the differential structure of $M$.
+
+\textbf{Definition 3.}
+If
+\[
+\theta:G\times M\to M
+\]
+is a smooth map, then $\theta$ is called a \textbf{smooth group action}.
+
+For each $g\in G$, the map
+\[
+\theta_g:M\to M
+\]
+is in fact automatically a diffeomorphism, because
+\[
+\theta_{g^{-1}}
+\]
+is precisely its inverse.
+
+Consequently, a smooth Lie group action gives a map
+\[
+G\longrightarrow\mathrm{Diff}(M),
+\]
+which turns group elements into diffeomorphisms of the manifold.
+
+Note that for a general manifold $M$, the full diffeomorphism group $\mathrm{Diff}(M)$ is usually an infinite-dimensional object, so it cannot simply be regarded as a finite-dimensional Lie group in the sense of this article. A finite-dimensional Lie group can nevertheless be embedded or mapped into these diffeomorphisms by means of a smooth action.
+
+
+\subsection{Example: the action of $\mathrm{SO}(3)$ on the sphere}
+
+Let
+\[
+S^2
+=
+\{x\in\mathbb{R}^3:\|x\|=1\}.
+\]
+
+$\mathrm{SO}(3)$ acts naturally on $S^2$:
+\[
+\theta:\mathrm{SO}(3)\times S^2\to S^2,
+\qquad
+\theta(R,x)=Rx.
+\]
+
+Since orthogonal matrices preserve length,
+\[
+\|Rx\|=\|x\|,
+\]
+so $Rx$ still lies in $S^2$.
+
+Moreover, for any $x,y\in S^2$ there is always a rotation $R\in\mathrm{SO}(3)$ such that
+\[
+Rx=y.
+\]
+
+Hence the action of $\mathrm{SO}(3)$ on $S^2$ is transitive. This example will lead naturally to homogeneous spaces later on.
+
+
+\section{Left and Right Translations and Invariant Structures}
+
+\subsection{Left and right translations}
+
+A Lie group can, of course, also act on itself.
+
+For any $g\in G$, define the \textbf{left translation}
+\[
+L_g:G\to G,
+\qquad
+L_g(h)=gh,
+\]
+and the \textbf{right translation}
+\[
+R_g:G\to G,
+\qquad
+R_g(h)=hg.
+\]
+
+Since multiplication and inversion in a Lie group are smooth, and
+\[
+L_g^{-1}=L_{g^{-1}},
+\qquad
+R_g^{-1}=R_{g^{-1}},
+\]
+both $L_g$ and $R_g$ are diffeomorphisms.
+
+This is a consequence of the definition of a Lie group itself, not some additional ``left invariance'' or ``right invariance'' that a Lie group must satisfy.
+
+
+\subsection{What left-invariant means}
+
+What is genuinely ``left-invariant'' or ``right-invariant'' is usually some additional geometric object defined on the Lie group, such as a vector field, a differential form or a Riemannian metric.
+
+For example, let $X$ be a vector field on $G$.
+
+We say that $X$ is a \textbf{left-invariant vector field} if
+\[
+(dL_g)_hX_h
+=
+X_{gh}
+\]
+holds for all $g,h\in G$.
+
+Similarly, if
+\[
+(dR_g)_hX_h
+=
+X_{hg},
+\]
+then $X$ is called a right-invariant vector field.
+
+The significance of left invariance is that a left-invariant vector field is completely determined by a single tangent vector at the identity
+\[
+e\in G.
+\]
+
+Indeed, if
+\[
+X_e\in T_eG,
+\]
+then for every $g\in G$ we must have
+\[
+X_g
+=
+(dL_g)_eX_e.
+\]
+
+This observation is precisely the key to the connection between Lie groups and Lie algebras.
+
+
+\section{Orbits and Stabilizers}
+
+\subsection{Orbits}
+
+Let a Lie group $G$ act smoothly on a manifold $M$.
+
+For fixed $p\in M$, define the orbit map
+\[
+\Phi_p:G\to M,
+\qquad
+\Phi_p(g)=g\cdot p.
+\]
+
+\textbf{Definition 4.}
+The \textbf{orbit} of a point $p$ is defined as
+\[
+G\cdot p
+=
+\{g\cdot p:g\in G\}.
+\]
+
+The orbit describes which points can be reached from $p$ under all the symmetry transformations permitted by the group.
+
+
+\subsection{Stabilizers}
+
+\textbf{Definition 5.}
+The \textbf{stabilizer subgroup} of a point $p\in M$, also called the isotropy subgroup, is defined as
+\[
+G_p
+=
+\{g\in G:g\cdot p=p\}.
+\]
+
+Clearly
+\[
+G_p<G.
+\]
+
+Since
+\[
+G_p=\Phi_p^{-1}(\{p\}),
+\]
+and singletons in a manifold are closed, $G_p$ is a closed subgroup of $G$.
+
+By the closed subgroup theorem, $G_p$ carries a natural Lie group structure of its own.
+
+
+\subsection{Orbits and quotient spaces}
+
+If
+\[
+g_1\cdot p=g_2\cdot p,
+\]
+then
+\[
+g_2^{-1}g_1\cdot p=p,
+\]
+so
+\[
+g_2^{-1}g_1\in G_p.
+\]
+
+Equivalently,
+\[
+g_1G_p=g_2G_p.
+\]
+
+Thus each point of the orbit corresponds to a single left coset in $G$.
+
+This gives the natural map
+\[
+G/G_p\longrightarrow G\cdot p,
+\qquad
+gG_p\longmapsto g\cdot p.
+\]
+
+With respect to the natural smooth structure on the orbit, this map is a diffeomorphism. The orbit can therefore be understood as the quotient space
+\[
+G\cdot p\cong G/G_p.
+\]
+
+
+\subsection{Dimension of an orbit}
+
+Since
+\[
+G\cdot p\cong G/G_p,
+\]
+the dimension of the orbit satisfies
+\[
+\boxed{
+\dim(G\cdot p)
+=
+\dim G-\dim G_p
+}.
+\]
+
+This formula has a very transparent geometric meaning.
+
+$\dim G$ counts the infinitesimal degrees of freedom provided by the group, while $\dim G_p$ counts how many of these transformations, though present in the group, do not move the point $p$. Only the remaining degrees of freedom produce genuine motion along the orbit.
+
+More concretely, the differential of the orbit map
+\[
+\Phi_p:G\to M
+\]
+at the identity is
+\[
+(d\Phi_p)_e:T_eG\to T_pM.
+\]
+
+Its kernel is exactly the Lie algebra of the stabilizer:
+\[
+\ker(d\Phi_p)_e
+=
+T_eG_p.
+\]
+
+Hence, by the rank--nullity theorem,
+\[
+\dim\operatorname{im}(d\Phi_p)_e
+=
+\dim G-\dim G_p.
+\]
+
+Since
+\[
+\operatorname{im}(d\Phi_p)_e
+=
+T_p(G\cdot p),
+\]
+this explains the formula for the dimension of an orbit.
+
+
+\section{Homogeneous Spaces}
+
+\textbf{Definition 6.}
+If a Lie group $G$ admits a transitive smooth action on a nonempty manifold $M$, that is, for any
+\[
+p,q\in M
+\]
+there exists $g\in G$ such that
+\[
+g\cdot p=q,
+\]
+then $M$ is called a \textbf{homogeneous $G$-space}.
+
+``Homogeneous'' means that, from the point of view of the group action, no point of the space is distinguished: any point can be moved to any other by some symmetry transformation.
+
+Choose $p\in M$ and set
+\[
+H=G_p.
+\]
+Since the action is transitive,
+\[
+M=G\cdot p,
+\]
+and therefore
+\[
+M\cong G/H.
+\]
+
+Homogeneous spaces are thus closely tied to quotients of Lie groups.
+
+Conversely, if $H$ is a closed subgroup of a Lie group $G$, then the quotient space
+\[
+G/H
+\]
+carries a natural smooth manifold structure, and $G$ acts transitively on $G/H$ via
+\[
+g\cdot(g'H)
+=
+(gg')H.
+\]
+
+The projection
+\[
+\pi:G\to G/H
+\]
+is moreover a smooth surjective submersion. In fact,
+\[
+H\hookrightarrow G\longrightarrow G/H
+\]
+is a natural principal $H$-bundle.
+
+For example,
+\[
+S^2
+\cong
+\mathrm{SO}(3)/\mathrm{SO}(2).
+\]
+
+This is because $\mathrm{SO}(3)$ can rotate any point of the sphere to any other point, while the rotations fixing the north pole form a stabilizer subgroup isomorphic to $\mathrm{SO}(2)$.
+
+
+\section{From Manifolds to Lie Algebras}
+
+\subsection{Tangent vectors}
+
+To pass from a Lie group to its Lie algebra, we first need to return to tangent spaces of smooth manifolds.
+
+Let $M$ be a smooth manifold and $p\in M$.
+
+One coordinate-free way to define tangent vectors is to regard them as derivations acting on smooth functions.
+
+\textbf{Definition 7.}
+A linear map
+\[
+v:C^\infty(M)\to\mathbb{R}
+\]
+is called a tangent vector at $p$ if for all
+\[
+f,g\in C^\infty(M)
+\]
+it satisfies the Leibniz rule
+\[
+v(fg)
+=
+f(p)v(g)+g(p)v(f).
+\]
+
+The tangent vectors at $p$ form a vector space, denoted
+\[
+T_pM.
+\]
+
+If
+\[
+\dim M=n,
+\]
+then
+\[
+\dim T_pM=n.
+\]
+
+Putting the tangent spaces at all points together yields the tangent bundle
+\[
+TM
+=
+\bigsqcup_{p\in M}T_pM.
+\]
+
+It is itself a smooth manifold, equipped with the natural projection
+\[
+\pi:TM\to M.
+\]
+
+
+\subsection{Vector fields}
+
+\textbf{Definition 8.}
+A \textbf{smooth vector field} on a manifold $M$ is a smooth section
+\[
+X:M\to TM,
+\]
+that is, a smooth map satisfying
+\[
+\pi\circ X=\operatorname{id}_M.
+\]
+
+In other words,
+\[
+X(p)\in T_pM
+\]
+for every $p\in M$, and these tangent vectors vary smoothly with $p$.
+
+The set of all smooth vector fields is denoted
+\[
+\mathfrak{X}(M).
+\]
+
+It is not only a real vector space but also a module over $C^\infty(M)$.
+
+If
+\[
+f\in C^\infty(M),
+\qquad
+X\in\mathfrak{X}(M),
+\]
+we can define
+\[
+(fX)_p=f(p)X_p.
+\]
+
+On the other hand, since each $X_p$ is itself a derivation, a vector field $X$ can also act on smooth functions:
+\[
+Xf:M\to\mathbb{R},
+\qquad
+(Xf)(p)=X_p(f).
+\]
+
+One must therefore distinguish between
+\[
+fX
+\]
+and
+\[
+Xf.
+\]
+
+The former is a vector field; the latter is a smooth real-valued function.
+
+
+\section{The Lie Bracket}
+
+There is a very natural operation on pairs of vector fields.
+
+\textbf{Definition 9.}
+For
+\[
+X,Y\in\mathfrak{X}(M),
+\]
+their \textbf{Lie bracket} is the vector field
+\[
+[X,Y]
+\]
+satisfying
+\[
+[X,Y]f
+=
+X(Yf)-Y(Xf)
+\]
+for all
+\[
+f\in C^\infty(M).
+\]
+
+In local coordinates
+\[
+(x^1,\ldots,x^n),
+\]
+if
+\[
+X
+=
+\sum_{i=1}^{n}
+X^i\frac{\partial}{\partial x^i},
+\qquad
+Y
+=
+\sum_{i=1}^{n}
+Y^i\frac{\partial}{\partial x^i},
+\]
+then
+\[
+[X,Y]
+=
+\sum_{k=1}^{n}
+\left(
+\sum_{i=1}^{n}
+X^i\frac{\partial Y^k}{\partial x^i}
+-
+Y^i\frac{\partial X^k}{\partial x^i}
+\right)
+\frac{\partial}{\partial x^k}.
+\]
+
+The Lie bracket measures the extent to which two infinitesimal flows fail to commute.
+
+It has the following basic properties. For
+\[
+X,Y,Z\in\mathfrak{X}(M),
+\qquad
+a,b\in\mathbb{R},
+\]
+we have:
+
+\begin{enumerate}
+    \item Bilinearity:
+    \[
+    [aX+bY,Z]
+    =
+    a[X,Z]+b[Y,Z],
+    \]
+    \[
+    [Z,aX+bY]
+    =
+    a[Z,X]+b[Z,Y].
+    \]
+
+    \item Antisymmetry:
+    \[
+    [X,Y]=-[Y,X].
+    \]
+
+    \item Jacobi identity:
+    \[
+    [X,[Y,Z]]
+    +
+    [Y,[Z,X]]
+    +
+    [Z,[X,Y]]
+    =
+    0.
+    \]
+\end{enumerate}
+
+Moreover, for
+\[
+f,g\in C^\infty(M),
+\]
+we have
+\[
+[fX,gY]
+=
+fg[X,Y]
++
+f(Xg)Y
+-
+g(Yf)X.
+\]
+
+It is worth stressing that the Lie bracket is bilinear over the real numbers, but in general not bilinear over $C^\infty(M)$. This reflects the fact that the Lie bracket inherently contains differential information.
+
+
+\section{Lie Algebras}
+
+\subsection{Abstract definition}
+
+\textbf{Definition 10.}
+A real \textbf{Lie algebra} is a real vector space $\mathfrak{g}$ equipped with a bilinear operation
+\[
+[\cdot,\cdot]:
+\mathfrak{g}\times\mathfrak{g}
+\to
+\mathfrak{g},
+\]
+called the Lie bracket, satisfying
+
+\[
+[X,Y]=-[Y,X]
+\]
+and the Jacobi identity
+\[
+[X,[Y,Z]]
++
+[Y,[Z,X]]
++
+[Z,[X,Y]]
+=
+0.
+\]
+
+Consequently,
+\[
+\mathfrak{X}(M)
+\]
+is itself a Lie algebra, although usually an infinite-dimensional one.
+
+
+\subsection{The Lie algebra of a Lie group}
+
+We can now finally explain why a Lie group naturally has an associated Lie algebra.
+
+Let $G$ be a Lie group with identity element $e$.
+
+For any
+\[
+X\in T_eG,
+\]
+we can define a left-invariant vector field
+\[
+\widetilde{X}_g
+=
+(dL_g)_eX.
+\]
+
+Conversely, every left-invariant vector field is completely determined by its value at the identity. Hence there is a natural one-to-one correspondence between
+\[
+T_eG
+\]
+and the left-invariant vector fields on $G$.
+
+More importantly, the Lie bracket of two left-invariant vector fields is again a left-invariant vector field.
+
+So for
+\[
+X,Y\in T_eG,
+\]
+we can define
+\[
+[X,Y]_{\mathfrak g}
+=
+[\widetilde X,\widetilde Y]_e.
+\]
+
+In this way,
+\[
+T_eG
+\]
+acquires the structure of a Lie algebra.
+
+We denote it by
+\[
+\mathfrak g
+=
+\operatorname{Lie}(G)
+=
+T_eG.
+\]
+
+Thus the common slogan ``the Lie algebra is the tangent space of the Lie group at the identity'', strictly speaking, leaves out half of the story:
+
+\[
+\boxed{
+\mathfrak g=T_eG
+\quad
+\text{equipped with the bracket induced by left-invariant vector fields.}
+}
+\]
+
+
+\section{Lie Algebras of Matrix Lie Groups}
+
+Matrix Lie groups make the abstract definition above very concrete.
+
+\subsection{$\mathrm{GL}(n,\mathbb{R})$}
+
+Since
+\[
+\mathrm{GL}(n,\mathbb{R})
+\]
+is an open subset of $M_n(\mathbb{R})$, its tangent space at the identity matrix is just
+\[
+T_I\mathrm{GL}(n,\mathbb{R})
+=
+M_n(\mathbb{R}).
+\]
+
+Hence
+\[
+\mathfrak{gl}(n,\mathbb{R})
+=
+M_n(\mathbb{R}).
+\]
+
+Its Lie bracket is precisely the matrix commutator:
+\[
+[A,B]
+=
+AB-BA.
+\]
+
+So the noncommutativity of matrix multiplication is recorded, at the infinitesimal scale, precisely by the Lie bracket.
+
+
+\subsection{$\mathrm{SL}(n,\mathbb{R})$}
+
+Consider
+\[
+\mathrm{SL}(n,\mathbb{R})
+=
+\{A:\det A=1\}.
+\]
+
+Take a smooth curve satisfying
+\[
+A(0)=I,
+\]
+and let
+\[
+A'(0)=X.
+\]
+
+Since
+\[
+\det A(t)=1,
+\]
+differentiating with respect to $t$ at $0$ gives
+\[
+\operatorname{tr}(X)=0.
+\]
+
+Therefore
+\[
+\mathfrak{sl}(n,\mathbb{R})
+=
+\{X\in M_n(\mathbb{R}):\operatorname{tr}(X)=0\}.
+\]
+
+
+\subsection{$\mathrm{SO}(n)$}
+
+For
+\[
+A(t)\in\mathrm{SO}(n),
+\]
+we have
+\[
+A(t)^{\mathsf T}A(t)=I.
+\]
+
+If
+\[
+A(0)=I,
+\qquad
+A'(0)=X,
+\]
+then differentiating the identity above yields
+\[
+X^{\mathsf T}+X=0.
+\]
+
+Therefore
+\[
+\boxed{
+\mathfrak{so}(n)
+=
+\{X\in M_n(\mathbb{R}):X^{\mathsf T}=-X\}.
+}
+\]
+
+In other words, the infinitesimal generators of the rotation group $\mathrm{SO}(n)$ are exactly the skew-symmetric matrices.
+
+In particular,
+\[
+\dim\mathfrak{so}(n)
+=
+\frac{n(n-1)}{2}.
+\]
+
+Hence
+\[
+\dim\mathrm{SO}(3)=3,
+\]
+in agreement with the fact that rotations of three-dimensional space have three infinitesimal degrees of freedom.
+
+
+\section{One-Parameter Subgroups and the Exponential Map}
+
+\subsection{One-parameter subgroups}
+
+The most direct bridge between a Lie group and its Lie algebra is provided by one-parameter subgroups.
+
+\textbf{Definition 11.}
+A smooth group homomorphism
+\[
+\gamma:(\mathbb{R},+)\to G
+\]
+is called a \textbf{one-parameter subgroup} of $G$.
+
+Since it is a group homomorphism,
+\[
+\gamma(s+t)
+=
+\gamma(s)\gamma(t)
+\]
+and
+\[
+\gamma(0)=e.
+\]
+
+A one-parameter subgroup can be pictured as the trajectory traced out in the Lie group by moving steadily along one fixed infinitesimal direction.
+
+
+\subsection{One-parameter subgroups from tangent vectors}
+
+A basic fact of Lie theory is the following.
+
+For every
+\[
+X\in T_eG,
+\]
+there exists a unique one-parameter subgroup
+\[
+\gamma_X:\mathbb{R}\to G
+\]
+satisfying
+\[
+\gamma_X'(0)=X.
+\]
+
+We then define the exponential map of the Lie group,
+\[
+\exp:\mathfrak g\to G,
+\]
+by
+\[
+\boxed{
+\exp(X)=\gamma_X(1).
+}
+\]
+
+More generally,
+\[
+\gamma_X(t)
+=
+\exp(tX).
+\]
+
+Hence
+\[
+\exp((s+t)X)
+=
+\exp(sX)\exp(tX).
+\]
+
+The exponential map converts an infinitesimal direction $X$ at the identity into a finite transformation in the Lie group.
+
+
+\subsection{The matrix exponential}
+
+For matrix Lie groups, the exponential map is the familiar matrix exponential
+\[
+\exp(X)
+=
+e^X
+=
+\sum_{k=0}^{\infty}\frac{X^k}{k!}.
+\]
+
+For example, if
+\[
+X\in\mathfrak{so}(n),
+\]
+then
+\[
+X^{\mathsf T}=-X.
+\]
+
+Hence
+\[
+(e^X)^{\mathsf T}
+=
+e^{X^{\mathsf T}}
+=
+e^{-X}
+=
+(e^X)^{-1},
+\]
+and so
+\[
+e^X\in\mathrm{O}(n).
+\]
+
+At the same time,
+\[
+\det(e^X)
+=
+e^{\operatorname{tr}X}
+=
+1,
+\]
+since a skew-symmetric matrix has trace zero. Therefore
+\[
+e^X\in\mathrm{SO}(n).
+\]
+
+This shows that
+\[
+\exp:
+\mathfrak{so}(n)
+\to
+\mathrm{SO}(n)
+\]
+indeed maps infinitesimal generators of rotations to finite rotations.
+
+
+\section{Local Properties of the Exponential Map}
+
+The exponential map has several fundamental properties.
+
+First,
+\[
+\exp(0)=e.
+\]
+
+Second, its differential at the origin satisfies
+\[
+(d\exp)_0
+=
+\operatorname{id}_{\mathfrak g}.
+\]
+
+Hence, by the inverse function theorem, there exist a neighborhood $U$ of $0\in\mathfrak g$ and a neighborhood $V$ of $e\in G$ such that
+\[
+\exp:U\to V
+\]
+is a diffeomorphism.
+
+This is one precise sense in which ``the Lie algebra describes the local structure of the Lie group near the identity''.
+
+One must be careful, however: the exponential map is in general \textbf{not a group homomorphism}.
+
+In general,
+\[
+\exp(X+Y)
+\neq
+\exp(X)\exp(Y).
+\]
+
+Only when
+\[
+[X,Y]=0
+\]
+do we have
+\[
+\exp(X+Y)
+=
+\exp(X)\exp(Y).
+\]
+
+If $X$ and $Y$ do not commute, the discrepancy between the two sides is governed by the Lie bracket. Locally, the Baker--Campbell--Hausdorff formula gives
+\[
+\log(\exp X\exp Y)
+=
+X+Y
++
+\frac12[X,Y]
++
+\frac1{12}[X,[X,Y]]
++
+\frac1{12}[Y,[Y,X]]
++\cdots.
+\]
+
+This formula is very important, because it shows explicitly why the Lie bracket is able to encode the noncommutative structure of the group multiplication near the identity.
+
+In this sense, the Lie algebra is not simply a ``linearization'' of the Lie group. Through
+\[
+[X,Y]
+\]
+it also retains the most essential noncommutative information of the group multiplication beyond its first-order linear structure.
+
+
+\section{Local versus Global Structure}
+
+The Lie algebra describes the local structure of a Lie group near the identity very effectively, but it cannot fully recover the global topology of the Lie group.
+
+For example,
+\[
+\mathrm{SU}(2)
+\]
+and
+\[
+\mathrm{SO}(3)
+\]
+are not the same Lie group.
+
+In fact,
+\[
+\mathrm{SU}(2)
+\]
+is simply connected, whereas
+\[
+\mathrm{SO}(3)
+\]
+is not, and there is a double covering
+\[
+\mathrm{SU}(2)\longrightarrow\mathrm{SO}(3).
+\]
+
+Yet their Lie algebras are isomorphic:
+\[
+\mathfrak{su}(2)
+\cong
+\mathfrak{so}(3).
+\]
+
+Roughly speaking, then:
+
+\[
+\boxed{
+\parbox{0.8\linewidth}{\centering
+The Lie algebra determines the local, infinitesimal structure of a Lie group,
+but not, on its own, its full global topology.}
+}
+\]
+
+This distinction will become especially important later, when we study covering spaces of Lie groups, fundamental groups and representation theory.
+
+
+\section{Summary}
+
+We can now retrace the main thread of this article.
+
+A Lie group $G$ is, first of all, an object carrying both a group structure and a smooth manifold structure. The group structure describes how symmetry transformations compose, while the smooth structure allows us to study continuous variation and infinitesimal transformations.
+
+At the identity element $e$ of the Lie group, the tangent space
+\[
+T_eG
+\]
+records all possible directions of infinitesimal motion near the identity.
+
+By left translation, each
+\[
+X\in T_eG
+\]
+extends uniquely to a left-invariant vector field on the whole Lie group,
+\[
+\widetilde X_g=(dL_g)_eX.
+\]
+
+Vector fields carry a natural Lie bracket, so $T_eG$ inherits a bracket operation as well:
+\[
+[X,Y]_{\mathfrak g}
+=
+[\widetilde X,\widetilde Y]_e.
+\]
+
+This yields the Lie algebra associated with the Lie group,
+\[
+\mathfrak g
+=
+\operatorname{Lie}(G)
+=
+T_eG.
+\]
+
+Finally, the exponential map
+\[
+\exp:\mathfrak g\to G
+\]
+turns infinitesimal generators in the Lie algebra into finite transformations in the Lie group.
+
+The whole picture can be summarized as
+\[
+\boxed{
+G
+\longrightarrow
+T_eG=\mathfrak g
+\overset{\exp}{\longrightarrow}
+G.
+}
+\]
+
+The first step extracts the infinitesimal structure of the Lie group at the identity; the second, via one-parameter subgroups, integrates an infinitesimal direction back into a finite continuous transformation.
+
+For matrix Lie groups the theory becomes especially concrete. For example,
+\[
+\mathrm{SO}(n)
+\quad\longleftrightarrow\quad
+\mathfrak{so}(n)
+=
+\{X:X^{\mathsf T}=-X\},
+\]
+and the exponential map is simply the matrix exponential
+\[
+X\longmapsto e^X.
+\]
+
+Lie groups and Lie algebras are thus not two independent theories. Lie groups capture the global structure of continuous symmetries, while Lie algebras capture their infinitesimal structure. Passing back and forth between the two is the most fundamental idea underlying all of Lie theory.
+
+\end{document}
